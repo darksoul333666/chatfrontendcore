@@ -5,6 +5,7 @@ import {
   } from "react-router-dom";
 import SideMenu from "../components/SideMenu";
 import NewTemplate from "../components/NewTemplate";
+import HeaderComponent from "../components/HeaderTemplate";
 
 
  export const router = createBrowserRouter([
@@ -15,6 +16,14 @@ import NewTemplate from "../components/NewTemplate";
         {
           path: "newTemplate",
           element: <NewTemplate/>,
+        },
+         {
+          path: "template/:templateId",
+          element: <>templateId</>,
+        },
+         {
+          path: "chat",
+          element: <HeaderComponent/>,
         },
       ],
     }
