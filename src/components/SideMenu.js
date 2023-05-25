@@ -20,7 +20,7 @@ function SideMenu() {
 
   return (
     <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "row" }}>
-      <div style={{ width: "15%", height: "100%" }}>
+      <div style={{ width: 200, height: "100%", backgroundColor:'red' }}>
         <Drawer
           variant="permanent"
           anchor="left"
@@ -51,7 +51,7 @@ function SideMenu() {
           </List>
         </Drawer>
       </div>
-      <div style={{ width: "85%", height: "100%", backgroundColor: "white" }}>
+      <div style={{ width: "85%", height: "100%", marginLeft:'10%',  backgroundColor: "white" }}>
         <Outlet />
       </div>
     </div>

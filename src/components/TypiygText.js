@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-const TypingText = () => {
+const TypingText = ({textProp}) => {
   const [text, setText] = useState("");
-  const message = "Escribe tu mensaje aquí...";
+
+  const message = textProp;
   const typingSpeed = 100; // Velocidad de escritura (en milisegundos)
   const erasingSpeed = 50; // Velocidad de borrado (en milisegundos)
 
@@ -13,6 +14,7 @@ const TypingText = () => {
 
     const startTyping = () => {
       if (charIndex < message.length) {
+        console.log(message.charAt(charIndex));
         setText((prevText) => prevText + message.charAt(charIndex));
         charIndex++;
         timerId = setTimeout(startTyping, typingSpeed);
@@ -23,14 +25,14 @@ const TypingText = () => {
     };
 
     const startErasing = () => {
-      if (charIndex > 0) {
-        setText((prevText) => prevText.slice(0, -1));
-        charIndex--;
-        timerId = setTimeout(startErasing, erasingSpeed);
-      } else {
-        isErasing = false;
-        timerId = setTimeout(startTyping, typingSpeed);
-      }
+      // if (charIndex > 0) {
+      //   setText((prevText) => prevText.slice(0, -1));
+      //   charIndex--;
+      //   timerId = setTimeout(startErasing, erasingSpeed);
+      // } else {
+      //   isErasing = false;
+      //   timerId = setTimeout(startTyping, typingSpeed);
+      // }
     };
 
     timerId = setTimeout(startTyping, typingSpeed);

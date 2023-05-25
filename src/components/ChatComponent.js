@@ -4,14 +4,23 @@ import 'react-chat-elements/dist/main.css';
 import HeaderComponent from '../components/HeaderTemplate';
 import { API, ROUTES } from '../api';
 import 'react-chat-elements/dist/main.css';
-
+import CircularProgress from '@mui/material/CircularProgress';
+import { Fab } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import {Box} from '@mui/material';
+import { Send } from '@material-ui/icons';
+import TypingText from './TypiygText';
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
+  const [sendingMessage, setSendingMessage] = useState(false);
   const messageListReference = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
+
   const handleMessageSubmit = async (event) => {
+    setSendingMessage(true);
     event.preventDefault();
     const userInput = event.target.message.value;
+    event.target.reset();
     const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify({ input: userInput }));
     const userMessage = {
       position: 'right',
@@ -29,16 +38,24 @@ const ChatComponent = () => {
     };
 
     setMessages([...messages, userMessage, aiMessage]);
-
-    event.target.reset();
+    setSendingMessage(false)
+    };
+  const buttonSx = {
+    ...(sendingMessage && {
+      bgcolor: 'green',
+      '&:hover': {
+        bgcolor: 'red',
+      },
+    }),
   };
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <HeaderComponent />
-      <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }}>
+      <HeaderComponent  />
+
+      <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto', marginTop:100 }}>
         <MessageList
-          ref={messageListReference}
+          // ref={messageListReference}
           className="message-list"
           lockable={true}
           toBottomHeight={'100%'}
@@ -94,7 +111,7 @@ const ChatComponent = () => {
               fontSize: '16px',
               marginLeft: '8px',
             }}
-          />
+          />{/* 
           <button
             type="submit"
             style={{
@@ -106,7 +123,31 @@ const ChatComponent = () => {
             }}
           >
             Enviar
-          </button>
+          </button> */}
+          {/* <CircularProgress  /> */}
+          <Box sx={{ m: 1, position: 'relative' }}>
+        <Fab
+          aria-label="save"
+          color="primary"
+          onClickCapture={()=> handleMessageSubmit}
+          sx={buttonSx}
+        >
+          {true && <Send /> }
+        </Fab>
+        {sendingMessage && (
+          <CircularProgress
+            size={68}
+            sx={{
+              color: 'green',
+              position: 'absolute',
+              top: -6,
+              left: -6,
+              zIndex: 1,
+            }}
+          />
+        )}
+        
+      </Box>
         </div>
       </form>
       </div>

@@ -56,10 +56,8 @@ const NewTemplate = () => {
         <CssBaseline />
         <Container fixed>
           <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }}>
-            <h1 style={{ textAlign: 'center' }}>New Template</h1>
             <div style={{ textAlign: 'center' }}>
-              <label htmlFor="NameTemplet">Name of the new template:</label>
-              <TextField id="outlined-basic" label="write the name" variant="outlined" />
+              <TextField sx={{marginTop:5}} id="outlined-basic" label="Nombre de la plantilla" variant="outlined" />
               <h3 style={{ textAlign: 'center' }}>Please Select Your training method</h3>
               <ToggleButtonGroup
                 orientation="vertical"
