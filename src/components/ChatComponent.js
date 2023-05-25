@@ -1,10 +1,27 @@
 import React, { useState, useRef } from 'react';
 import { MessageList } from 'react-chat-elements';
 import 'react-chat-elements/dist/main.css'; // Importa el archivo CSS de react-chat-elements
+import HeaderComponent from "../components/HeaderTemplate";
+import { API } from '../api';
 
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const messageListReference = useRef(null);
+
+
+  (await API())
+        .post(ROUTES.GET_CALLS_BY_ID, JSON.stringify({ idUser }))
+        .then(response => {
+          console.log(response.data.data);
+          setCalls(response.data.data.calls);
+          setLoadingUsers(false);
+
+        })
+        .catch(error => {
+          console.log(error);
+          setLoadingUsers(false);
+
+        })
 
   const handleMessageSubmit = (event) => {
     event.preventDefault();
@@ -23,7 +40,7 @@ const ChatComponent = () => {
 
     const userMessage = { position: 'right', type: 'text', text: userInput, date: new Date() };
     const aiMessage = { position: 'left', type: 'text', text: aiResponse, date: new Date() };
-
+    
     setMessages([...messages, userMessage, aiMessage]);
 
     event.target.reset();
@@ -32,7 +49,7 @@ const ChatComponent = () => {
   return (
     <div
     style={{ textAlign: 'center' }}>
-        <h1>Hello! Welcome to your Chat Bot. How can I assist you today?</h1>
+       <HeaderComponent/>
       <MessageList
         ref={messageListReference}
         className="message-list"
@@ -61,6 +78,10 @@ const ChatComponent = () => {
             borderRadius: '20px',
             padding: '4px 8px',
             margin: '8px 0',
+            position:'absolute',
+            width:399,
+            alignSelf:'center',
+            bottom:0
           }}
         >
           <input

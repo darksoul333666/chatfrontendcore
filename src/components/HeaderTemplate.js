@@ -9,10 +9,10 @@ const HeaderComponent = () => (
     <Box sx={{ flexGrow: 1, backgroundColor: "red" }}>
   <AppBar position="static">
     <Toolbar sx={{ justifyContent: "center", flex:1, display:'flex' }}>
-        <Avatar sx={{ bgcolor: "green", width:75, height:75,  position:'absolute', top:25 }}></Avatar>
+    <h1>Hello! Welcome to your Chat Bot. How can I assist you today?</h1>
+        <Avatar sx={{ bgcolor: "green", width:75, height:75 }}></Avatar>
         {/* <Button color="inherit">Asistente</Button> */}
       {/* <Button color="inherit">Right Button</Button> */}
-      <TypingText />
     </Toolbar>
   </AppBar>
 </Box>
