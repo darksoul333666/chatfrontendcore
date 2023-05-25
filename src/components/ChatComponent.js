@@ -17,9 +17,8 @@ const ChatComponent = () => {
     const userInput = event.target.message.value;
     //const response = await API.post(ROUTES.GET_AI_RESPONS, JSON.stringify({ input:userInput}));
     const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify({ input:userInput}));
-
     const userMessage = { position: 'right', type: 'text', text: userInput, date: new Date() };
-    const aiMessage = { position: 'left', type: 'text', text: response, date: new Date() };
+    const aiMessage = { position: 'left', type: 'text', text: response.data.data, date: new Date() };
 
     setMessages([...messages, userMessage, aiMessage]);
 
