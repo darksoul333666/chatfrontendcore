@@ -6,6 +6,7 @@ import {
 import SideMenu from "../components/SideMenu";
 import NewTemplate from "../components/NewTemplate";
 import HeaderComponent from "../components/HeaderTemplate";
+import  ChatComponent  from "../components/ChatComponent";
 
 
  export const router = createBrowserRouter([
@@ -24,7 +25,12 @@ import HeaderComponent from "../components/HeaderTemplate";
          {
           path: "header",
           element: <HeaderComponent/>,
-        },
+        },{
+
+       
+        path:"chat",
+        element: <ChatComponent/>,
+      }
       ],
     }
   ]);
