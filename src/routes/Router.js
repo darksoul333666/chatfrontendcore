@@ -22,7 +22,7 @@ import HeaderComponent from "../components/HeaderTemplate";
           element: <>templateId</>,
         },
          {
-          path: "chat",
+          path: "header",
           element: <HeaderComponent/>,
         },
       ],
