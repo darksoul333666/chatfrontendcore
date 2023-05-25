@@ -8,7 +8,6 @@ const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const messageListReference = useRef(null);
 
-
   (await API())
         .post(ROUTES.GET_CALLS_BY_ID, JSON.stringify({ idUser }))
         .then(response => {
