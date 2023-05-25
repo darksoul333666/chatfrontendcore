@@ -1,54 +1,34 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MessageList } from 'react-chat-elements';
-import 'react-chat-elements/dist/main.css'; // Importa el archivo CSS de react-chat-elements
-import HeaderComponent from "../components/HeaderTemplate";
-import { API } from '../api';
+import 'react-chat-elements/dist/main.css';
+import HeaderComponent from '../components/HeaderTemplate';
+import { API, ROUTES } from '../api';
 
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const messageListReference = useRef(null);
 
-  (await API())
-        .post(ROUTES.GET_CALLS_BY_ID, JSON.stringify({ idUser }))
-        .then(response => {
-          console.log(response.data.data);
-          setCalls(response.data.data.calls);
-          setLoadingUsers(false);
+  
+  
+ 
 
-        })
-        .catch(error => {
-          console.log(error);
-          setLoadingUsers(false);
-
-        })
-
-  const handleMessageSubmit = (event) => {
+  const handleMessageSubmit =async (event) => {
     event.preventDefault();
     const userInput = event.target.message.value;
-
-    let aiResponse = '';
-
-    // Lógica para determinar la respuesta del chatbot
-    if (userInput === 'Hola') {
-      aiResponse = '¡Hola! ¿En qué puedo ayudarte?';
-    } else if (userInput === 'Cómo estás?') {
-      aiResponse = 'Estoy bien, ¡gracias por preguntar!';
-    } else {
-      aiResponse = 'Lo siento, no entiendo tu pregunta.';
-    }
+    //const response = await API.post(ROUTES.GET_AI_RESPONS, JSON.stringify({ input:userInput}));
+    const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify({ input:userInput}));
 
     const userMessage = { position: 'right', type: 'text', text: userInput, date: new Date() };
-    const aiMessage = { position: 'left', type: 'text', text: aiResponse, date: new Date() };
-    
+    const aiMessage = { position: 'left', type: 'text', text: response, date: new Date() };
+
     setMessages([...messages, userMessage, aiMessage]);
 
     event.target.reset();
   };
 
   return (
-    <div
-    style={{ textAlign: 'center' }}>
-       <HeaderComponent/>
+    <div style={{ textAlign: 'center' }}>
+      <HeaderComponent />
       <MessageList
         ref={messageListReference}
         className="message-list"
@@ -56,15 +36,20 @@ const ChatComponent = () => {
         toBottomHeight={'100%'}
         dataSource={messages.map((message, index) => ({
           ...message,
-          id: index, // Agrega un ID único para cada mensaje
+          id: index,
         }))}
-        style={{
-          /* Estilos para ocultar los triángulos */
-          '.message.right .triangle::after': {
-            display: 'none',
-          },
-          '.message.left .triangle::after': {
-            display: 'none',
+        styles={{
+          message: {
+            right: {
+              '.triangle::after': {
+                display: 'none',
+              },
+            },
+            left: {
+              '.triangle::after': {
+                display: 'none',
+              },
+            },
           },
         }}
       />
@@ -77,10 +62,9 @@ const ChatComponent = () => {
             borderRadius: '20px',
             padding: '4px 8px',
             margin: '8px 0',
-            position:'absolute',
-            width:399,
-            alignSelf:'center',
-            bottom:0
+            position: 'fixed',
+            width: 399,
+            bottom: 0,
           }}
         >
           <input

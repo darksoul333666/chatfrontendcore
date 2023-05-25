@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 //export const URL_API = 'https://webrtc-assistance-api.herokuapp.com/';
-export const URL_API = 'http://192.168.1.54:4000/';
+export const URL_API = 'http://192.168.32.146:4000/';
 
   function config(URL) {
     return {
@@ -17,5 +17,6 @@ export const URL_API = 'http://192.168.1.54:4000/';
 export const API = async () => axios.create( config(URL_API));
 
 export const ROUTES = {
-
+//chat Ai respuesta
+GET_AI_RESPONS:'chat'
 }
