@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 //export const URL_API = 'https://webrtc-assistance-api.herokuapp.com/';
-export const URL_API = 'http://192.168.1.68:3200/';
+export const URL_API = 'http://192.168.1.69:3200/';
 
   function config(URL) {
     return {
       baseURL: URL,
-      timeout: 10000,
+      timeout: 60000,
       headers: {
         'Content-Type': 'application/json',
 

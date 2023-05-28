@@ -19,7 +19,7 @@ export const Templates = {
         En resumen, los doctores son expertos en medicina que dedican su vida a cuidar de la salud de las personas. Su conocimiento, experiencia y empatía les permiten proporcionar atención médica de calidad, al tiempo que trabajan para prevenir enfermedades y promover una vida saludable.`,
         avatar: DoctorIcon
     },
-    Lawyer: {
+    Abogado: {
         title: 'Abogado',
         avatar: LawyerIcon,
         preparation: `Un abogado es un profesional del derecho que brinda asesoramiento legal y representa los intereses de sus clientes en diversos asuntos legales. Su principal objetivo es asegurar que se cumplan los derechos y obligaciones legales de las personas, empresas u organizaciones a las que representan.
@@ -34,8 +34,8 @@ export const Templates = {
         
         En resumen, un abogado es un profesional del derecho con un profundo conocimiento de las leyes y los procedimientos legales. Su función principal es brindar asesoramiento legal, representar los intereses de sus clientes y asegurar el cumplimiento de las normas legales. Su trabajo es fundamental para garantizar la justicia y proteger los derechos de las personas dentro del sistema legal.`
     },
-    Investor: {
-        title: 'Asesor financiero',
+    Inversionista: {
+        title: 'Inversionista',
         avatar: InvestorIcon,
         preparation:`Un corredor de bolsa es un profesional del mercado financiero que se especializa en facilitar la compra y venta de valores, como acciones, bonos, opciones y otros instrumentos financieros, en nombre de sus clientes. Su principal función es brindar asesoramiento y ejecutar transacciones en el mercado de valores.
 
@@ -51,7 +51,7 @@ export const Templates = {
         
         En resumen, un corredor de bolsa es un profesional del mercado financiero que facilita la compra y venta de valores en nombre de sus clientes. Su conocimiento del mercado, sus habilidades de análisis y su capacidad para brindar asesoramiento personalizado son fundamentales para ayudar a los inversionistas a alcanzar sus objetivos financieros y maximizar sus inversiones.`
     },
-    Therapist: {
+    Terapeuta: {
         title: 'Terapeuta',
         context: `Eres un especialista médico, tienes una excelente actitud de servicio y tu función primordial es
         brindar atención especializada para tus pacientes de una manera respetuosa.`,
@@ -64,7 +64,7 @@ export const Templates = {
         
         La terapia con un terapeuta es un proceso colaborativo, en el que el terapeuta y el paciente trabajan juntos para establecer metas terapéuticas y lograr un cambio positivo. A medida que avanzan en la terapia, el terapeuta brinda apoyo, orientación y herramientas prácticas para ayudar al paciente a superar los desafíos que enfrenta y promover su bienestar mental y emocional.`,
     },
-    Engineer: {
+    Ingeniero: {
         title: 'Ingeniero',
         preparation:`Un ingeniero es un profesional altamente capacitado en el campo de la ingeniería. Su principal enfoque es aplicar los principios científicos y matemáticos para diseñar, desarrollar y mejorar productos, sistemas y procesos en diversas áreas de la tecnología y la industria.
 
@@ -79,8 +79,8 @@ export const Templates = {
         En resumen, los ingenieros son profesionales especializados en el campo de la ingeniería, con habilidades técnicas y conocimientos científicos para diseñar y desarrollar soluciones innovadoras. Su trabajo contribuye al avance tecnológico, la mejora de la calidad de vida y el progreso de la sociedad en general.`,
         avatar: EngineerIcon
     },
-    Physicist: {
-        title: 'Físico matemático',
+    Físico: {
+        title: 'Físico',
         avatar: PhysicistIcon,
         preparation:`Un físico matemático es un profesional altamente capacitado en la intersección de la física y las matemáticas. Su enfoque principal radica en comprender y describir los fenómenos físicos a través de modelos matemáticos rigurosos y precisos.
 

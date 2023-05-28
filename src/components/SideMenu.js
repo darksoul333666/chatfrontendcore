@@ -8,6 +8,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Personalities, Templates } from '../config/Templates';
+import * as Actions from '../redux/actions';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -42,44 +45,60 @@ const styles = {
     flexBasis: '15%',
     backgroundColor: '#f0f0f0',
   },
+ 
 };
 
-const RenderTemplatesMenu = () => {
-  const templates = Object.values(Templates)
-  const classes = useStyles()
-  return (
-    <div style={{overflow:'scroll'}} >
-          {templates.map( template => 
-              <ListItem button className={classes.listItem} >
-              <ListItemText primary={template.title} />
-              <ListItemIcon>
-              {template.avatar()}
-              </ListItemIcon>
-            </ListItem>
-            )}
-    </div>
-  )
-}
-
-const RenderPersonalitiesMenu = () => {
-  const personalities = Object.values(Personalities)
-  const classes = useStyles()
-  return (
-    <div style={{overflow:'scroll'}} >
-          {personalities.map( template => 
-              <ListItem button className={classes.listItem} >
-              <ListItemText primary={template.title} />
-              {/* <ListItemIcon>
-              {template.avatar()}
-              </ListItemIcon> */}
-            </ListItem>
-            )}
-    </div>
-  )
-}
-
-function SideMenu() {
-  const classes = useStyles()
+const SideMenu = () => {
+  const classes = useStyles();
+  const templateProfesion = useSelector(store => store.Chat.templateProfesion);
+  const templateStyle = useSelector(store => store.Chat.templateStyle);
+  const dispatch = useDispatch();
+  const RenderTemplatesMenu = () => {
+    const templates = Object.values(Templates);
+    return (
+      <div style={{overflow:'scroll'}} >
+            {templates.map( template => { 
+                const isSelected = templateProfesion === template.title;
+                const bgColor = {
+                  backgroundColor: isSelected ? '#1976d2' : 'white',
+                  color: isSelected ? 'white' : 'black'
+                }
+                return(<ListItem button className={classes.listItem} style={bgColor}  onClick={() => 
+                  dispatch(Actions.ChangeTemplateConfiguration({
+                  templateProfesion:template.title,
+                  templateStyle:templateStyle
+                })) }>
+                <ListItemText primary={template.title} />
+                <ListItemIcon>
+                {template.avatar()}
+                </ListItemIcon>
+              </ListItem>)}
+              )}
+      </div>
+    )
+  }
+  
+  const RenderPersonalitiesMenu = () => {
+    const personalities = Object.values(Personalities)
+    return (
+      <div style={{overflow:'scroll'}} >
+            {personalities.map( template => {
+              const isSelected = templateStyle === template.title;
+              const bgColor = {
+                backgroundColor: isSelected ? '#1976d2' : 'white',
+                color: isSelected ? 'white' : 'black'
+              }
+                return(<ListItem button className={classes.listItem} style={bgColor} onClick={() =>   
+                  dispatch(Actions.ChangeTemplateConfiguration({
+                  templateProfesion:templateProfesion,
+                  templateStyle:template.title
+                }))} >
+                <ListItemText primary={template.title} />
+              </ListItem>
+              )})}
+      </div>
+    )
+  }
   return (
     <div style={styles.parentContainer}>
     <div style={styles.child1}>
@@ -91,28 +110,19 @@ function SideMenu() {
             paper: classes.drawer,
           }}
         >
-            <List>
-                <ListItem button className={classes.listItem} >
-                  <ListItemIcon>
-                    <ChatIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="New Chat" />
-                </ListItem>
-                </List>
           <Card
             style={{
               display: 'flex',
               flexDirection: 'column',
-             
-              height: '50%',
-              marginTop: 230,
+              marginTop:"25%",
+              height: '70%',
             }}
           >
             <CardContent>
             <Typography variant="body2" textAlign={'center'} color="text.secondary">
               Templates
             </Typography>
-              <List style={{overflow:'scroll', height:"80%" }} > 
+              <List style={{overflow:'scroll', height:"100%" }} > 
               <RenderTemplatesMenu/>
               </List>
             </CardContent>
@@ -131,28 +141,34 @@ function SideMenu() {
             paper: classes.drawer,
           }}
         >
-            <List>
-                <ListItem button className={classes.listItem} >
-                  <ListItemIcon>
-                    <ChatIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="New Chat" />
-                </ListItem>
-                </List>
           <Card
             style={{
               display: 'flex',
               flexDirection: 'column',
-             
-              height: '50%',
-              marginTop: 230,
+              height: '20%',
+            }}
+          >
+            <CardContent>
+            <Typography variant="body2" textAlign={'center'} color="text.secondary">
+              Motor
+            </Typography>
+            <List style={{overflow:'scroll', height:"100%" }} > 
+              </List>
+            </CardContent>
+          </Card>
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '70%',
+              marginTop:'5%'
             }}
           >
             <CardContent>
             <Typography variant="body2" textAlign={'center'} color="text.secondary">
               Estilo de respuesta
             </Typography>
-            <List style={{overflow:'scroll', height:"80%" }} > 
+            <List style={{overflow:'scroll', height:"100%" }} > 
               <RenderPersonalitiesMenu/>
               </List>
             </CardContent>

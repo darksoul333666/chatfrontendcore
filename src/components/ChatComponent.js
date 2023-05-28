@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MessageList } from 'react-chat-elements';
 import 'react-chat-elements/dist/main.css';
 import HeaderComponent from '../components/HeaderTemplate';
@@ -11,13 +11,24 @@ import {Box} from '@mui/material';
 import { Send } from '@material-ui/icons';
 import TypingText from './TypiygText';
 import { Templates, Personalities } from '../config/Templates';
+import { useSelector } from 'react-redux';
 
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [sendingMessage, setSendingMessage] = useState(false);
   const messageListReference = useRef(null);
-  const [isTyping, setIsTyping] = useState(false);
+  const messageContainerRef = useRef(null);
+  const lastMessageRef = useRef(null);
 
+  const [isTyping, setIsTyping] = useState(false);
+  const templateProfesion = useSelector(store => store.Chat.templateProfesion);
+  const templateStyle = useSelector(store => store.Chat.templateStyle);
+  const templateActually = useState({
+    templateStyle,
+    templateProfesion,
+    avatar:  templateProfesion
+  });
+  
   const handleMessageSubmit = async (event) => {
     try {
       setSendingMessage(true);
@@ -26,20 +37,12 @@ const ChatComponent = () => {
       event.target.reset();
       const data = {
         input: userInput,
-        style: Personalities.Amigable.titulo,
-        styleDescription: Personalities.Amigable.descripcion,
-        profesion: Templates.Doctor.title,
-        profesionDescription: Templates.Doctor.preparation
+        style: templateStyle,
+        profesion: templateProfesion,
       }
       const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify(data));
       console.log(response);
-      const userMessage = {
-        position: 'right',
-        type: 'text',
-        text: userInput,
-        date: new Date(),
-        style: { color: 'blue' },
-      };
+     
       const aiMessage = {
         position: 'left',
         type: 'text',
@@ -47,10 +50,18 @@ const ChatComponent = () => {
         date: new Date(),
         style: { color: 'red' },
       };
+      const userMessage = {
+        position: 'right',
+        type: 'text',
+        text: userInput,
+        date: new Date(),
+        style: { color: 'blue' },
+      };
 
       if(response?.data?.data){
          setMessages([...messages, userMessage, aiMessage]);
-      setSendingMessage(false)
+        setSendingMessage(false);
+        scrollToBottom()
       }
   
      
@@ -59,6 +70,17 @@ const ChatComponent = () => {
     }
   
     };
+    useEffect(() => {
+      scrollToBottom();
+    }, [messages]);
+  
+    const scrollToBottom = () => {
+      if (lastMessageRef.current) {
+        lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  
+
   const buttonSx = {
     ...(sendingMessage && {
       bgcolor: 'green',
@@ -69,20 +91,17 @@ const ChatComponent = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <HeaderComponent  />
-
-      <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto', marginTop:100 }}>
+    <div style={{ textAlign: 'center', flex:1,  display:'flex', flexDirection:'column' }}>
+      <HeaderComponent />
+      <div style={{ height:"100%", textAlign:'justify', marginTop:100, marginBottom:100 }} >
         <MessageList
-          // ref={messageListReference}
           className="message-list"
           lockable={true}
-          toBottomHeight={'100%'}
+          toBottomHeight={"100%"}
           dataSource={messages.map((message, index) => ({
             ...message,
             id: index,
             position: message.position === 'right' ? 'right' : 'left',
-            style: { background: message.position === 'right' ? 'blue' : 'red' },
           }))}
           styles={{
             message: {
@@ -103,18 +122,19 @@ const ChatComponent = () => {
         />
          {isTyping && <div>El usuario está escribiendo...</div>}
       </div>
-      <div style={{flex:1, flexDirection: 'column', height: '100vh', alignItems: 'center', justifyContent: 'center',marginLeft:350 }} >
-      <form onSubmit={handleMessageSubmit} className="message-input">
+      <div ref={lastMessageRef} style={{flex:1, flexDirection: 'row', }} >
+      <form style={{display:'flex',  justifyContent:'center' }} onSubmit={handleMessageSubmit} className="message-input">
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
+            justifyContent:'center',
+            textAlign:'justify',
             background: '#f5f5f5',
-            borderRadius: '20px',
-            padding: '4px 8px',
+            borderRadius: '25px',
             margin: '8px 0',
             position: 'fixed',
-            width: '399px',
+            width: '40%',
             bottom: 0,
           }}
         >
@@ -128,22 +148,10 @@ const ChatComponent = () => {
               background: 'none',
               outline: 'none',
               fontSize: '16px',
-              marginLeft: '8px',
+              marginLeft: '10px',
+              justifySelf:'center'
             }}
-          />{/* 
-          <button
-            type="submit"
-            style={{
-              border: 'none',
-              background: 'none',
-              outline: 'none',
-              cursor: 'pointer',
-              marginLeft: '8px',
-            }}
-          >
-            Enviar
-          </button> */}
-          {/* <CircularProgress  /> */}
+          />
           <Box sx={{ m: 1, position: 'relative' }}>
         <Fab
           aria-label="save"
