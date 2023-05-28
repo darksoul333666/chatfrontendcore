@@ -4,7 +4,7 @@ const TypingText = ({textProp}) => {
   const [text, setText] = useState("");
 
   const message = textProp;
-  const typingSpeed = 100; // Velocidad de escritura (en milisegundos)
+  const typingSpeed = 1; // Velocidad de escritura (en milisegundos)
   const erasingSpeed = 50; // Velocidad de borrado (en milisegundos)
 
   useEffect(() => {

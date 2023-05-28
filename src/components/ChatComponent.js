@@ -10,6 +10,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import {Box} from '@mui/material';
 import { Send } from '@material-ui/icons';
 import TypingText from './TypiygText';
+import { Templates, Personalities } from '../config/Templates';
+
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [sendingMessage, setSendingMessage] = useState(false);
@@ -17,28 +19,45 @@ const ChatComponent = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   const handleMessageSubmit = async (event) => {
-    setSendingMessage(true);
-    event.preventDefault();
-    const userInput = event.target.message.value;
-    event.target.reset();
-    const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify({ input: userInput }));
-    const userMessage = {
-      position: 'right',
-      type: 'text',
-      text: userInput,
-      date: new Date(),
-      style: { color: 'blue' },
-    };
-    const aiMessage = {
-      position: 'left',
-      type: 'text',
-      text: response.data.data,
-      date: new Date(),
-      style: { color: 'red' },
-    };
+    try {
+      setSendingMessage(true);
+      event.preventDefault();
+      const userInput = event.target.message.value;
+      event.target.reset();
+      const data = {
+        input: userInput,
+        style: Personalities.Amigable.titulo,
+        styleDescription: Personalities.Amigable.descripcion,
+        profesion: Templates.Doctor.title,
+        profesionDescription: Templates.Doctor.preparation
+      }
+      const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify(data));
+      console.log(response);
+      const userMessage = {
+        position: 'right',
+        type: 'text',
+        text: userInput,
+        date: new Date(),
+        style: { color: 'blue' },
+      };
+      const aiMessage = {
+        position: 'left',
+        type: 'text',
+        text: response.data.data,
+        date: new Date(),
+        style: { color: 'red' },
+      };
 
-    setMessages([...messages, userMessage, aiMessage]);
-    setSendingMessage(false)
+      if(response?.data?.data){
+         setMessages([...messages, userMessage, aiMessage]);
+      setSendingMessage(false)
+      }
+  
+     
+    } catch (error) {
+      console.log(error);
+    }
+  
     };
   const buttonSx = {
     ...(sendingMessage && {

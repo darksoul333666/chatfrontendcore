@@ -1,24 +1,13 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { makeStyles, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
 import DescriptionIcon from '@material-ui/icons/Description';
 import AddIcon from '@material-ui/icons/Add';
-import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
+import { Personalities, Templates } from '../config/Templates';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -26,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#BCDBD6',
   },
   listItem: {
-    paddingLeft: theme.spacing(2),
+    // paddingLeft: theme.spacing(2),
     borderRadius: '50px',
     padding: '10px 20px',
     margin: '10px 0',
@@ -34,12 +23,66 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SideMenu() {
-  const classes = useStyles();
+const styles = {
+  parentContainer: {
+    display: 'flex',
+    width:'100%',
+    height: '100vh', /* Ocupar todo el alto de la pantalla */
+  },
+  child1: {
+    flexBasis: '15%',
+    backgroundColor: '#f0f0f0',
+  },
+  child2: {
+    flexBasis: '70%',
+    backgroundColor: '#e0e0e0',
+    overflowY: 'auto', /* Permitir scroll vertical si es necesario */
+  },
+  child3: {
+    flexBasis: '15%',
+    backgroundColor: '#f0f0f0',
+  },
+};
 
+const RenderTemplatesMenu = () => {
+  const templates = Object.values(Templates)
+  const classes = useStyles()
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'row', backgroundColor: 'black' }}>
-      <div style={{ width: '10%', height: '100%', backgroundColor: 'red' }}>
+    <div style={{overflow:'scroll'}} >
+          {templates.map( template => 
+              <ListItem button className={classes.listItem} >
+              <ListItemText primary={template.title} />
+              <ListItemIcon>
+              {template.avatar()}
+              </ListItemIcon>
+            </ListItem>
+            )}
+    </div>
+  )
+}
+
+const RenderPersonalitiesMenu = () => {
+  const personalities = Object.values(Personalities)
+  const classes = useStyles()
+  return (
+    <div style={{overflow:'scroll'}} >
+          {personalities.map( template => 
+              <ListItem button className={classes.listItem} >
+              <ListItemText primary={template.title} />
+              {/* <ListItemIcon>
+              {template.avatar()}
+              </ListItemIcon> */}
+            </ListItem>
+            )}
+    </div>
+  )
+}
+
+function SideMenu() {
+  const classes = useStyles()
+  return (
+    <div style={styles.parentContainer}>
+    <div style={styles.child1}>
         <Drawer
           variant="permanent"
           anchor="left"
@@ -66,37 +109,37 @@ function SideMenu() {
             }}
           >
             <CardContent>
-              <h1>Templates</h1>
-              <List>
+            <Typography variant="body2" textAlign={'center'} color="text.secondary">
+              Templates
+            </Typography>
+              <List style={{overflow:'scroll', height:"80%" }} > 
+              <RenderTemplatesMenu/>
+              </List>
+            </CardContent>
+          </Card>
+        </Drawer>
+    </div>
+    <div style={styles.child2}>
+      <Outlet />
+    </div>
+    <div style={styles.child3}>
+    <Drawer
+          variant="permanent"
+          anchor="rigth"
+          className={classes.drawer}
+          classes={{
+            paper: classes.drawer,
+          }}
+        >
+            <List>
                 <ListItem button className={classes.listItem} >
                   <ListItemIcon>
                     <ChatIcon />
                   </ListItemIcon>
                   <ListItemText primary="New Chat" />
                 </ListItem>
-                <ListItem button className={classes.listItem}>
-                  <ListItemIcon>
-                    <DescriptionIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Templates" />
-                </ListItem>
-                <ListItem button className={classes.listItem}>
-                  <ListItemIcon>
-                    <AddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Add New" />
-                </ListItem>
-              </List>
-            </CardContent>
-          </Card>
-        </Drawer>
-      </div>
-      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '85%', height: '100%', marginLeft: '5%', backgroundColor: 'white' }}>
-          <Outlet />
-        </div>
-        <div style={{ width: '17%', height: '100%' }}>
-        <Card
+                </List>
+          <Card
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -106,32 +149,17 @@ function SideMenu() {
             }}
           >
             <CardContent>
-              <h1>Templates</h1>
-              <List>
-                <ListItem button className={classes.listItem} >
-                  <ListItemIcon>
-                    <ChatIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="New Chat" />
-                </ListItem>
-                <ListItem button className={classes.listItem}>
-                  <ListItemIcon>
-                    <DescriptionIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Templates" />
-                </ListItem>
-                <ListItem button className={classes.listItem}>
-                  <ListItemIcon>
-                    <AddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Add New" />
-                </ListItem>
+            <Typography variant="body2" textAlign={'center'} color="text.secondary">
+              Estilo de respuesta
+            </Typography>
+            <List style={{overflow:'scroll', height:"80%" }} > 
+              <RenderPersonalitiesMenu/>
               </List>
             </CardContent>
           </Card>
-        </div>
-      </div>
+     </Drawer>
     </div>
+  </div>
   );
 }
 
