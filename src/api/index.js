@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//export const URL_API = 'https://webrtc-assistance-api.herokuapp.com/';
-export const URL_API = 'http://192.168.1.69:3200/';
+export const URL_API = 'https://app-chat-ai.herokuapp.com/';
+// export const URL_API = 'http://192.168.1.69:3200/';
 
   function config(URL) {
     return {
