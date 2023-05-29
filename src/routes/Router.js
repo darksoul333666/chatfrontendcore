@@ -11,7 +11,7 @@ import  ChatComponent  from "../components/ChatComponent";
 
  export const router = createBrowserRouter([
     {
-      path: "/nav",
+      path: "/",
       element: <SideMenu/> ,
       children: [
         {

@@ -149,9 +149,9 @@ const SideMenu = () => {
             }}
           >
             <CardContent>
-            <Typography variant="body2" textAlign={'center'} color="text.secondary">
+            {/* <Typography variant="body2" textAlign={'center'} color="text.secondary">
               Motor
-            </Typography>
+            </Typography> */}
             <List style={{overflow:'scroll', height:"100%" }} > 
               </List>
             </CardContent>
