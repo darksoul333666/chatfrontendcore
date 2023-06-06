@@ -162,14 +162,14 @@ const SideMenu = () => {
             </Typography>
               <List style={{overflow:'scroll', height:"100%" }} > 
               <RenderTemplatesMenu/>
-              <Fab
+              {/* <Fab
                 aria-label="save"
                 color="primary"
                 onClickCapture={()=> navigate('/newTemplate')}
                 sx={{  marginLeft:10 }}
                >
              <AddCircleIcon/>
-            </Fab>
+            </Fab> */}
               </List>
               
             </CardContent>
