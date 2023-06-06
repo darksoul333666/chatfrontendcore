@@ -6,12 +6,22 @@ import { API, ROUTES } from '../api';
 import 'react-chat-elements/dist/main.css';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Fab } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
 import {Box} from '@mui/material';
 import { Send } from '@material-ui/icons';
-import TypingText from './TypiygText';
-import { Templates, Personalities } from '../config/Templates';
 import { useSelector } from 'react-redux';
+import { useParams } from "react-router-dom";
+import EngineerAvatar from '../assets/engineer.svg';
+import InvestorAvatar from '../assets/investor.svg';
+import LawyerAvatar from '../assets/lawyer.svg';
+import PhysicistAvatar from '../assets/physicist.svg';
+import TherapistAvatar from '../assets/therapist.svg';
+import MyAvatar from '../assets/myAvatar.svg';
+import MyAvatar1 from '../assets/myAvatar (1).svg';
+import MyAvatar2 from '../assets/myAvatar (2).svg';
+import MyAvatar3 from '../assets/myAvatar (3).svg';
+import MyAvatar4 from '../assets/myAvatar (4).svg';
+import MyAvatar5 from '../assets/myAvatar (5).svg';
+import MyAvatar6 from '../assets/myAvatar (6).svg';
 
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
@@ -19,6 +29,7 @@ const ChatComponent = () => {
   const messageListReference = useRef(null);
   const messageContainerRef = useRef(null);
   const lastMessageRef = useRef(null);
+  let { idTemplate, idx } = useParams();
 
   const [isTyping, setIsTyping] = useState(false);
   const templateProfesion = useSelector(store => store.Chat.templateProfesion);
@@ -28,6 +39,27 @@ const ChatComponent = () => {
     templateProfesion,
     avatar:  templateProfesion
   });
+
+  useEffect(() => {
+    if(idTemplate !== undefined){
+      const avatars = Array.from(Array(20).keys());
+      const avatarImages = [
+        EngineerAvatar,
+        InvestorAvatar,
+        LawyerAvatar,
+        PhysicistAvatar,
+        TherapistAvatar,
+        MyAvatar,
+        MyAvatar1,
+        MyAvatar2,
+        MyAvatar3,
+        MyAvatar4,
+        MyAvatar5,
+        MyAvatar6,
+      ];
+    }
+    
+  },[idTemplate])
   
   const handleMessageSubmit = async (event) => {
     try {
@@ -39,6 +71,7 @@ const ChatComponent = () => {
         input: userInput,
         style: templateStyle,
         profesion: templateProfesion,
+        idTemplate
       }
       const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify(data));
       console.log(response);
@@ -92,7 +125,7 @@ const ChatComponent = () => {
 
   return (
     <div style={{ textAlign: 'center', flex:1,  display:'flex', flexDirection:'column' }}>
-      <HeaderComponent />
+      <HeaderComponent indexAvatar={idx} />
       <div style={{ height:"100%", textAlign:'justify', marginTop:100, marginBottom:100 }} >
         <MessageList
           className="message-list"

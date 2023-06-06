@@ -28,7 +28,7 @@ import  ChatComponent  from "../components/ChatComponent";
         },{
 
        
-        path:"chat",
+        path:"chat/:idTemplate/:idx",
         element: <ChatComponent/>,
       }
       ],

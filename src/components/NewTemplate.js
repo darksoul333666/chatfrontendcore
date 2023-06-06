@@ -25,12 +25,22 @@ import MyAvatar3 from '../assets/myAvatar (3).svg';
 import MyAvatar4 from '../assets/myAvatar (4).svg';
 import MyAvatar5 from '../assets/myAvatar (5).svg';
 import MyAvatar6 from '../assets/myAvatar (6).svg';
+import PdfToText from './PdfToText';
+import { API, ROUTES } from '../api';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import * as Actions from '../redux/actions';
+
 const NewTemplate = () => {
   const [templateName, setTemplateName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState('');
   const [trainingMethod, setTrainingMethod] = useState('');
   const [responseStyle, setResponseStyle] = useState('');
   const [file, setFile] = useState(null);
+  const [textFile, setTextFile] = useState('');
+  const [description, setDesciption] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleTemplateNameChange = (event) => {
     setTemplateName(event.target.value);
@@ -48,19 +58,30 @@ const NewTemplate = () => {
     setResponseStyle(event.target.value);
   };
 
-  const handleFileUpload = (event) => {
-    const uploadedFile = event.target.files[0];
-    setFile(uploadedFile);
-  };
-
-  const handleSave = () => {
+  const handleSave = async() => {
     console.log('Saving data:', {
-      templateName,
-      selectedAvatar,
-      trainingMethod,
+      name:templateName,
+      avatar:selectedAvatar,
       responseStyle,
-      file
+      textTraining:textFile,
+      description
     });
+
+    const template = {
+      name:templateName,
+      avatar:selectedAvatar,
+      responseStyle,
+      // textTraining:textFile,
+      description
+    }
+
+    const response = await (await API()).post(ROUTES.CREATE_TEMPLATE, JSON.stringify({template}));
+    if(response.data.success){
+      dispatch(Actions.ChangeTemplateConfiguration({templateStyle: response.data.data.templateStyle, 
+        templateProfesion: response.data.data.templateProfesion }));
+      navigate(`/chat/${response.data.data._id.toString()}/${response.data.data.avatar}`)
+    }
+
   };
 
   const AvatarTable = () => {
@@ -116,7 +137,7 @@ const NewTemplate = () => {
             }}
           >
             <div style={{ textAlign: 'center' }}>
-              <h2 style={{ marginBottom: '20px' }}>New Template</h2>
+              <h2 style={{ marginBottom: '20px' }}>Nueva plantilla</h2>
               <TextField
                 sx={{ marginBottom: '20px' }}
                 id="outlined-basic"
@@ -125,37 +146,22 @@ const NewTemplate = () => {
                 value={templateName}
                 onChange={handleTemplateNameChange}
               />
-              <h3 style={{ textAlign: 'center', marginTop: '20px' }}>Please select your Avatar</h3>
+              <h3 style={{ textAlign: 'center', marginTop: '20px' }}>Elige un avatar para tu plantilla</h3>
 
               <AvatarTable />
-              <h3 style={{ textAlign: 'center', marginTop: '20px' }}>Please select your training method</h3>
-              <ToggleButtonGroup
-                orientation="vertical"
-                value={trainingMethod}
-                exclusive
-                onChange={handleTrainingMethodChange}
-                sx={{ mt: 2 }}
-              >
-                <ToggleButton
-                  value="method1"
-                  sx={{ width: '100%', backgroundColor: 'None', color: 'black', '& input': { display: 'none' } }}
-                >
-                  TRAIN WITH TEXT
+              <h3 style={{ textAlign: 'center', marginTop: '20px' }}>Selecciona uno o dos métodos de entrenamiento</h3>
+            
                   <TextField
                     fullWidth
+                    placeholder={'Agrega una descripción'}
                     multiline
                     rows={4}
-                    placeholder="Enter text"
+                    onChange={(e) => setDesciption(e.target.value)}
                   />
-                </ToggleButton>
-                <ToggleButton
-                  value="method2"
-                  sx={{ width: '100%', backgroundColor: '#9fa8da', color: 'white' }}
-                >
-                  TRAIN WITH FILE <input type="file" onChange={handleFileUpload} />
-                </ToggleButton>
-              </ToggleButtonGroup>
-              <h3 style={{ textAlign: 'center', marginTop: '20px' }}>Select response style</h3>
+                <PdfToText onTextIsLoaded={setTextFile} />
+
+                {/* <ConvertImageToText/> */}
+              <h3 style={{ textAlign: 'center', marginTop: '20px' }}>Elige un estilo de respuesta</h3>
               <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <InputLabel id="demo-select-small-label">Style </InputLabel>
       <Select
@@ -165,12 +171,9 @@ const NewTemplate = () => {
         label="Age"
         onChange={handleResponseStyleChange}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        <MenuItem value="style1">Analitico</MenuItem>
-        <MenuItem value="style2">Intorvertido</MenuItem>
-        <MenuItem value="style3">Extorvertido</MenuItem>
+        <MenuItem value="style1">Analítico</MenuItem>
+        <MenuItem value="style2">Introvertido</MenuItem>
+        <MenuItem value="style3">Extrovertido</MenuItem>
         <MenuItem value="style1">Amigable</MenuItem>
         <MenuItem value="style2">Perfecionista</MenuItem>
         <MenuItem value="style3">Asertivo</MenuItem>

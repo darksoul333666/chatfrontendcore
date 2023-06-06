@@ -27,3 +27,7 @@ export const DoctorIcon = () => (
   export const TherapistIcon = () => (
     <img src={require('./therapist.svg').default} style={propertiesIcon} alt="Therapist Icon" />
   );
+
+  export const BotIcon = () => (
+    <img src={require('./bot.svg').default} style={propertiesIcon} alt="Bot Icon" />
+  );

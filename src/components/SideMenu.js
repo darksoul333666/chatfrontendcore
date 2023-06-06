@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { makeStyles, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -11,6 +11,12 @@ import { Personalities, Templates } from '../config/Templates';
 import * as Actions from '../redux/actions';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { Fab } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { API, ROUTES } from '../api';
+import { BotIcon } from '../assets';
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -50,27 +56,59 @@ const styles = {
 
 const SideMenu = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const templateProfesion = useSelector(store => store.Chat.templateProfesion);
   const templateStyle = useSelector(store => store.Chat.templateStyle);
   const dispatch = useDispatch();
+  const [templates, setTemplates] = useState([]);
+  let { idTemplate } = useParams();
+
+  useEffect(() =>{
+    getTemplates();
+  },[])
+
+  useEffect(() =>{
+    if(idTemplate !== null){
+      let template = templates.find(template => template._id === idTemplate);
+      if(template){
+        dispatch(Actions.ChangeTemplateConfiguration({
+          templateProfesion:template.name,
+          templateStyle:templateStyle
+        }))
+      }
+     
+    }
+  },[idTemplate, templates])
+
+  const getTemplates = async() => {
+    const response = await (await API()).get(ROUTES.GET_TEMPLATES);
+
+    setTemplates(response.data.data);
+    console.log(response.data.data);
+  }
+
   const RenderTemplatesMenu = () => {
-    const templates = Object.values(Templates);
+    // const templates = Object.values(Templates);
     return (
       <div style={{overflow:'scroll'}} >
             {templates.map( template => { 
-                const isSelected = templateProfesion === template.title;
+                const isSelected = templateProfesion === template.name;
                 const bgColor = {
                   backgroundColor: isSelected ? '#1976d2' : 'white',
                   color: isSelected ? 'white' : 'black'
                 }
                 return(<ListItem button className={classes.listItem} style={bgColor}  onClick={() => 
-                  dispatch(Actions.ChangeTemplateConfiguration({
-                  templateProfesion:template.title,
-                  templateStyle:templateStyle
-                })) }>
-                <ListItemText primary={template.title} />
+                  {
+                    navigate(`/chat/${template._id}/0`);
+                    dispatch(Actions.ChangeTemplateConfiguration({
+                      templateProfesion:template.name,
+                      templateStyle:templateStyle
+                    }))
+                  } }>
+                <ListItemText primary={template.name} />
                 <ListItemIcon>
-                {template.avatar()}
+                {/* <BotIcon/> */}
+                {BotIcon()}
                 </ListItemIcon>
               </ListItem>)}
               )}
@@ -124,7 +162,16 @@ const SideMenu = () => {
             </Typography>
               <List style={{overflow:'scroll', height:"100%" }} > 
               <RenderTemplatesMenu/>
+              <Fab
+                aria-label="save"
+                color="primary"
+                onClickCapture={()=> navigate('/newTemplate')}
+                sx={{  marginLeft:10 }}
+               >
+             <AddCircleIcon/>
+            </Fab>
               </List>
+              
             </CardContent>
           </Card>
         </Drawer>
@@ -141,27 +188,13 @@ const SideMenu = () => {
             paper: classes.drawer,
           }}
         >
-          <Card
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: '20%',
-            }}
-          >
-            <CardContent>
-            {/* <Typography variant="body2" textAlign={'center'} color="text.secondary">
-              Motor
-            </Typography> */}
-            <List style={{overflow:'scroll', height:"100%" }} > 
-              </List>
-            </CardContent>
-          </Card>
+
           <Card
             style={{
               display: 'flex',
               flexDirection: 'column',
               height: '70%',
-              marginTop:'5%'
+              marginTop:'25%'
             }}
           >
             <CardContent>
