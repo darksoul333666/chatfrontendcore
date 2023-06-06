@@ -26,8 +26,7 @@ import MyAvatar6 from '../assets/myAvatar (6).svg';
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
   const [sendingMessage, setSendingMessage] = useState(false);
-  const messageListReference = useRef(null);
-  const messageContainerRef = useRef(null);
+  const [search, setSearch] = useState('');
   const lastMessageRef = useRef(null);
   let { idTemplate, idx } = useParams();
 
@@ -65,8 +64,8 @@ const ChatComponent = () => {
     try {
       setSendingMessage(true);
       event.preventDefault();
-      const userInput = event.target.message.value;
-      event.target.reset();
+      const userInput = search;
+      setSearch('');
       const data = {
         input: userInput,
         style: templateStyle,
@@ -174,6 +173,8 @@ const ChatComponent = () => {
           <input
             type="text"
             name="message"
+            value={search}
+            onChange={(e) => setSearch(e.target.value) }
             placeholder="Escribe un mensaje"
             style={{
               flex: '1',
@@ -189,7 +190,7 @@ const ChatComponent = () => {
         <Fab
           aria-label="save"
           color="primary"
-          onClickCapture={()=> handleMessageSubmit}
+          onClick={(e) => handleMessageSubmit(e) }
           sx={buttonSx}
         >
           {true && <Send /> }
