@@ -72,16 +72,6 @@ const ChatComponent = () => {
         profesion: templateProfesion,
         idTemplate
       }
-      const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify(data));
-      console.log(response);
-     
-      const aiMessage = {
-        position: 'left',
-        type: 'text',
-        text: response.data.data,
-        date: new Date(),
-        style: { color: 'red' },
-      };
       const userMessage = {
         position: 'right',
         type: 'text',
@@ -89,9 +79,24 @@ const ChatComponent = () => {
         date: new Date(),
         style: { color: 'blue' },
       };
+      const chatList = [...messages, userMessage]
+      setMessages(chatList);
+
+      const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify(data));     
+     
+    
 
       if(response?.data?.data){
-         setMessages([...messages, userMessage, aiMessage]);
+        let newCHatList = chatList;
+        // newCHatList.pop();
+        const aiMessage = {
+          position: 'left',
+          type: 'text',
+          text: response.data.data,
+          date: new Date(),
+          style: { color: 'red' },
+        };
+         setMessages([...newCHatList, aiMessage ]);
         setSendingMessage(false);
         scrollToBottom()
       }

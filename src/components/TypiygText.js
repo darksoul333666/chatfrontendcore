@@ -1,52 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-const TypingText = ({textProp}) => {
-  const [text, setText] = useState("");
-
-  const message = textProp;
-  const typingSpeed = 1; // Velocidad de escritura (en milisegundos)
-  const erasingSpeed = 50; // Velocidad de borrado (en milisegundos)
+const TypingEffect = ({ text, speed }) => {
+  const [currentText, setCurrentText] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    let timerId;
-    let charIndex = 0;
-    let isErasing = false;
+    let timer;
 
-    const startTyping = () => {
-      if (charIndex < message.length) {
-        console.log(message.charAt(charIndex));
-        setText((prevText) => prevText + message.charAt(charIndex));
-        charIndex++;
-        timerId = setTimeout(startTyping, typingSpeed);
-      } else {
-        isErasing = true;
-        timerId = setTimeout(startErasing, typingSpeed);
-      }
-    };
-
-    const startErasing = () => {
-      // if (charIndex > 0) {
-      //   setText((prevText) => prevText.slice(0, -1));
-      //   charIndex--;
-      //   timerId = setTimeout(startErasing, erasingSpeed);
-      // } else {
-      //   isErasing = false;
-      //   timerId = setTimeout(startTyping, typingSpeed);
-      // }
-    };
-
-    timerId = setTimeout(startTyping, typingSpeed);
+    if (currentIndex < text.length) {
+      timer = setTimeout(() => {
+        setCurrentText((prevText) => prevText + text[currentIndex]);
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      }, speed);
+    }
 
     return () => {
-      clearTimeout(timerId);
+      clearTimeout(timer);
     };
-  }, []);
+  }, [currentIndex, speed, text]);
 
-  return (
-    <div>
-      <p>{text}</p>
-    </div>
-  );
+  return <span>{currentText}</span>;
 };
 
-export default TypingText;
+export default TypingEffect;
