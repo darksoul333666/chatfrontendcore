@@ -17,6 +17,7 @@ import MyAvatar3 from '../assets/myAvatar (3).svg';
 import MyAvatar4 from '../assets/myAvatar (4).svg';
 import MyAvatar5 from '../assets/myAvatar (5).svg';
 import MyAvatar6 from '../assets/myAvatar (6).svg';
+import Robot from '../assets/robot.png';
 import { useSelector } from 'react-redux';
 
 const HeaderComponent = ({indexAvatar}) => {
@@ -59,15 +60,16 @@ const HeaderComponent = ({indexAvatar}) => {
       MyAvatar4,
       MyAvatar5,
       MyAvatar6,
+      Robot,
     ];
     setAvatarShowed(avatarImages[indexAvatar])
   },[indexAvatar])
 
   return(
     <AppBar position="fixed" >
-      <Toolbar sx={{ justifyContent: 'center', }}>
-        <Box sx={{ display: 'flex', position:'absolute' }}>
-          <Avatar src={avatarShowed} sx={{ width: 95, height: 95, marginTop:4 }} />
+      <Toolbar sx={{ justifyContent: 'center',backgroundColor:'white' }}>
+        <Box sx={{ display: 'flex', position:'absolute',justifyContent: 'center' }}>
+          <Avatar src={Robot} sx={{ width: 100, height: 130, marginTop:10 }} />
         </Box>
       </Toolbar>
     </AppBar>

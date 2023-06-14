@@ -7,6 +7,7 @@ import SideMenu from "../components/SideMenu";
 import NewTemplate from "../components/NewTemplate";
 import HeaderComponent from "../components/HeaderTemplate";
 import  ChatComponent  from "../components/ChatComponent";
+import  ChatSteren  from "../components/ChatSteren";
 
 
  export const router = createBrowserRouter([
@@ -32,5 +33,7 @@ import  ChatComponent  from "../components/ChatComponent";
         element: <ChatComponent/>,
       }
       ],
+      path: "STEREN",
+      element: <ChatSteren/> ,
     }
   ]);
