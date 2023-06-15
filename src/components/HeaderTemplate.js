@@ -20,7 +20,7 @@ import MyAvatar6 from '../assets/myAvatar (6).svg';
 import Robot from '../assets/robot.png';
 import { useSelector } from 'react-redux';
 
-const HeaderComponent = ({indexAvatar}) => {
+const HeaderComponent = ({indexAvatar, isMobile}) => {
   const [avatarShowed, setAvatarShowed] = useState(null);
   const templateProfesion = useSelector(store => store.Chat.templateProfesion); 
   const templateStyle = useSelector(store => store.Chat.templateStyle);
@@ -69,7 +69,7 @@ const HeaderComponent = ({indexAvatar}) => {
     <AppBar position="fixed" >
       {/* <Toolbar   sx={{ justifyContent: 'center',backgroundColor:'white' }}> */}
         <Box sx={{ display: 'flex',  width:"100%", position:'absolute',justifyContent: 'center' }}>
-          <Avatar src={Robot} sx={{ width: 65, height: 90, marginTop:6}} />
+          <Avatar src={Robot} sx={{ width: 65, height: 90, marginTop: isMobile ? 0 : 6}} />
         </Box>
       {/* </Toolbar> */}
     </AppBar>

@@ -11,13 +11,15 @@ import robot from '../assets/robot.png';
 import enviarIcon from '../assets/Enviar.png';
 import PromptQuestion from './PromptQuestion';
 import ResponseAi from './ResponseAi';
-
+import useScreenSize from '../hooks/resize';
 const ChatSteren = () => {
   const [messages, setMessages] = useState([]);
   const [sendingMessage, setSendingMessage] = useState(false);
   const [search, setSearch] = useState('');
   const lastMessageRef = useRef(null);
   let { idTemplate, idx } = useParams();
+  const {height, width} = useScreenSize();
+  const [isMobile, setIsMobile] = useState(false);
 
   const [isTyping, setIsTyping] = useState(false);
   const templateProfesion = useSelector((store) => store.Chat.templateProfesion);
@@ -28,6 +30,10 @@ const ChatSteren = () => {
       const avatars = Array.from(Array(0).keys());
     }
   }, [idTemplate]);
+
+  useEffect(() => {
+    setIsMobile(width < 1000);
+  },[width])
 
   const handleMessageSubmit = async (event) => {
     try {
@@ -74,7 +80,6 @@ const ChatSteren = () => {
           style: { color: 'blue' },
         };
         setMessages([...newChatList, aiMessage]);
-        console.log([...newChatList, aiMessage]);
         setSendingMessage(false);
         scrollToBottom();
       }
@@ -110,9 +115,9 @@ const ChatSteren = () => {
       }}
     >
       <HeaderComponent indexAvatar={idx} />
-      <div ref={lastMessageRef} style={{ height: '100%', width:"50%",
+      <div ref={lastMessageRef} style={{ height: '100%', width:isMobile ? "95%" : "50%",
       overflow:'scroll',
-      textAlign: 'justify', marginTop: 100, marginBottom: 80, marginTop:100 }}>
+      textAlign: 'justify', marginTop: 100, marginBottom: 80, marginTop:isMobile ? 120 : 100 }}>
         {messages.map((message, index) => {
           if (message.position === 'right') {
             return (
@@ -146,7 +151,7 @@ const ChatSteren = () => {
               borderRadius: '25px',
               margin: '8px 0',
               position: 'fixed',
-              width: '40%',
+              width: isMobile ? '80%' : '40%',
               bottom: 0,
             }}
           >
