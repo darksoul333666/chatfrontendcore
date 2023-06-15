@@ -12,6 +12,7 @@ import enviarIcon from '../assets/Enviar.png';
 import PromptQuestion from './PromptQuestion';
 import ResponseAi from './ResponseAi';
 import useScreenSize from '../hooks/resize';
+import Header from './header';
 const ChatSteren = () => {
   const [messages, setMessages] = useState([]);
   const [sendingMessage, setSendingMessage] = useState(false);
@@ -114,10 +115,12 @@ const ChatSteren = () => {
         flexDirection: 'column'
       }}
     >
-      <HeaderComponent indexAvatar={idx} />
-      <div ref={lastMessageRef} style={{ height: '100%', width:isMobile ? "95%" : "50%",
+      {/* <HeaderComponent indexAvatar={idx} /> */}
+      <Header/>
+      <div ref={lastMessageRef} 
+      style={{ height: '100%', width:isMobile ? "95%" : "50%",
       overflow:'scroll',
-      textAlign: 'justify', marginTop: 100, marginBottom: 80, marginTop:isMobile ? 120 : 100 }}>
+      textAlign: 'justify',  marginBottom: 80, marginTop:!isMobile ? 80 : 10 }}>
         {messages.map((message, index) => {
           if (message.position === 'right') {
             return (
