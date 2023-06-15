@@ -46,23 +46,35 @@ const ChatSteren = () => {
         type: 'text',
         text: userInput,
         date: new Date(),
+        isResponsed:false,
         style: { color: 'blue' },
       };
-      const chatList = [...messages, userMessage];
+      const aiMessage = {
+        position: 'left',
+        type: 'text',
+        text: '',
+        isResponsed:false,
+        date: new Date(),
+        style: { color: 'blue' },
+      };
+      const chatList = [...messages, userMessage, aiMessage];
       setMessages(chatList);
 
       const response = await (await API()).post(ROUTES.GET_AI_RESPONS, JSON.stringify(data));
 
       if (response?.data?.data) {
         let newChatList = chatList;
+        newChatList.pop();
         const aiMessage = {
           position: 'left',
           type: 'text',
           text: response.data.data,
+          isResponsed:true,
           date: new Date(),
           style: { color: 'blue' },
         };
         setMessages([...newChatList, aiMessage]);
+        console.log([...newChatList, aiMessage]);
         setSendingMessage(false);
         scrollToBottom();
       }
@@ -72,7 +84,7 @@ const ChatSteren = () => {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // scrollToBottom();
   }, [messages]);
 
   const scrollToBottom = () => {
@@ -92,11 +104,15 @@ const ChatSteren = () => {
         textAlign: 'center',
         flex: 1,
         display: 'flex',
+        justifyContent:'center',
+        alignItems:'center',
         flexDirection: 'column'
       }}
     >
       <HeaderComponent indexAvatar={idx} />
-      <div style={{ height: '100%', textAlign: 'justify', marginTop: 100, marginBottom: 100 }}>
+      <div ref={lastMessageRef} style={{ height: '100%', width:"50%",
+      overflow:'scroll',
+      textAlign: 'justify', marginTop: 100, marginBottom: 80, marginTop:100 }}>
         {messages.map((message, index) => {
           if (message.position === 'right') {
             return (
@@ -106,15 +122,15 @@ const ChatSteren = () => {
             );
           } else {
             return (
-              <div key={index} className="prompt-container left">
-                <ResponseAi message={message.text} />
+              <div key={index} className="prompt-container center">
+                <ResponseAi isResponsed={message.isResponsed} message={message.text} />
               </div>
             );
           }
         })}
         {isTyping && <div>El usuario está escribiendo...</div>}
       </div>
-      <div ref={lastMessageRef} style={{ flex: 1, flexDirection: 'row' }}>
+      <div style={{ flex: 1, flexDirection: 'row' }}>
         <form
           style={{ display: 'flex', justifyContent: 'center' }}
           onSubmit={handleMessageSubmit}
@@ -126,7 +142,7 @@ const ChatSteren = () => {
               alignItems: 'center',
               justifyContent: 'center',
               textAlign: 'justify',
-              background: '#f5f5f5',
+              backgroundColor: 'white',
               borderRadius: '25px',
               margin: '8px 0',
               position: 'fixed',
@@ -143,7 +159,6 @@ const ChatSteren = () => {
               style={{
                 flex: '1',
                 border: 'none',
-                background: 'none',
                 outline: 'none',
                 fontSize: '16px',
                 marginLeft: '10px',
@@ -154,7 +169,7 @@ const ChatSteren = () => {
               <Fab onClick={(e) => handleMessageSubmit(e)}>
                 <img src={enviarIcon} alt="Enviar" style={{ width: '60px', height: '60px' }} />
               </Fab>
-              {sendingMessage && (
+              {/* {sendingMessage && (
                 <CircularProgress
                   size={68}
                   sx={{
@@ -165,7 +180,7 @@ const ChatSteren = () => {
                     zIndex: 1,
                   }}
                 />
-              )}
+              )} */}
             </Box>
           </div>
         </form>

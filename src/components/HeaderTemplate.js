@@ -67,11 +67,11 @@ const HeaderComponent = ({indexAvatar}) => {
 
   return(
     <AppBar position="fixed" >
-      <Toolbar sx={{ justifyContent: 'center',backgroundColor:'white' }}>
-        <Box sx={{ display: 'flex', position:'absolute',justifyContent: 'center' }}>
-          <Avatar src={Robot} sx={{ width: 100, height: 130, marginTop:10 }} />
+      {/* <Toolbar   sx={{ justifyContent: 'center',backgroundColor:'white' }}> */}
+        <Box sx={{ display: 'flex',  width:"100%", position:'absolute',justifyContent: 'center' }}>
+          <Avatar src={Robot} sx={{ width: 65, height: 90, marginTop:6}} />
         </Box>
-      </Toolbar>
+      {/* </Toolbar> */}
     </AppBar>
 );
 }
