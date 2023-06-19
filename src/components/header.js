@@ -1,37 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Box, Container } from '@mui/material';
-import Robot from '../assets/robot.png';
+import { BotIconNotSpeaking, BotIconSpeaking } from '../assets';
+import LongPress from 'react-longpressable';
+const Header = ({isMobile, setSpeak= Function}) => {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const styles = {
+    header: {
+      height:!isMobile ? 100 : 40,
+      borderBottomLeftRadius: '30%',
+      borderBottomRightRadius: '20%',
+      // overflow: 'hidden',
+    },
+    image: {
+      width:60,
+      height:70,
+      background:'none'
+    },
+  }
 
-const useStyles = makeStyles(({isMobile}) => ({
-  header: {
-    height:!isMobile ? 100 : 40,
-    borderBottomLeftRadius: '30%',
-    borderBottomRightRadius: '20%',
-    // overflow: 'hidden',
-  },
-  image: {
-    // display: 'block',
-    // margin: '0 auto',
-    // maxWidth: '100%',
-    width:60,
-    height:70,
-    background:'none'
-  },
-}));
-
-const Header = () => {
-  const classes = useStyles();
+  useEffect(() =>{
+    setSpeak(isSpeaking);
+  },[isSpeaking])
 
   return (
-    <header className={classes.header}>
+    <header className={styles.header}>
       <Container>
         <Box py={4}>
-          <img
-            src={Robot}
-            alt="Logo"
-            className={classes.image}
-          />
+          <LongPress
+          onShortPress={() =>setIsSpeaking(!isSpeaking)}
+          onLongPress={()=>{}}
+          >
+          {isSpeaking ? 
+        <BotIconSpeaking onClick={() =>setIsSpeaking(!isSpeaking)} />
+          :
+        <BotIconNotSpeaking onClick={() =>setIsSpeaking(!isSpeaking)} />
+          }
+          </LongPress>
+         
         </Box>
       </Container>
     </header>

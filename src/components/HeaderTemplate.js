@@ -9,8 +9,6 @@ import LawyerAvatar from '../assets/lawyer.svg';
 import PhysicistAvatar from '../assets/physicist.svg';
 import TherapistAvatar from '../assets/therapist.svg';
 import MyAvatar from '../assets/myAvatar.svg';
-import BotIcon from '../assets/bot.svg';
-// import { BotIcon } from '../assets';
 import MyAvatar1 from '../assets/myAvatar (1).svg';
 import MyAvatar2 from '../assets/myAvatar (2).svg';
 import MyAvatar3 from '../assets/myAvatar (3).svg';
@@ -48,7 +46,6 @@ const HeaderComponent = ({indexAvatar, isMobile}) => {
     // }
     const avatars = Array.from(Array(20).keys());
     const avatarImages = [
-      BotIcon,
       InvestorAvatar,
       LawyerAvatar,
       PhysicistAvatar,

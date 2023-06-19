@@ -15,7 +15,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Fab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { API, ROUTES } from '../api';
-import { BotIcon } from '../assets';
 import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -108,7 +107,6 @@ const SideMenu = () => {
                 <ListItemText primary={template.name} />
                 <ListItemIcon>
                 {/* <BotIcon/> */}
-                {BotIcon()}
                 </ListItemIcon>
               </ListItem>)}
               )}

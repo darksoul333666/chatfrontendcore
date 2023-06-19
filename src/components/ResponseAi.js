@@ -1,5 +1,6 @@
 import React from 'react';
-import robotAvatar from '../assets/robot.png';
+// import robotAvatar from '../assets/robot.png';
+import robotAvatar from '../assets/BotNotSpeaking.png'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TypingEffect from './TypiygText';
 
@@ -11,7 +12,7 @@ const ResponseAi = ({ message, isResponsed }) => {
           <div style={{backgroundColor:'#9CF1EB', display:'flex', flexDirection:'column',
           alignItems:'center', justifyContent:'center', marginRight: '10px',
           borderRadius:50, width:45, height:45}} >
-          <img src={robotAvatar} alt="Robot Avatar" style={{ width: '40px', height: '40px', marginLeft:3, marginTop:2 }} />
+          <img src={robotAvatar} alt="Robot Avatar" style={{ width: '30px', height: '30px', marginLeft:1, marginTop:2 }} />
           </div>
           {isResponsed ? (
             <TypingEffect text={message} speed={40}/>

@@ -3,17 +3,14 @@ import axios from 'axios';
 import HeaderComponent from '../components/HeaderTemplate';
 import { API, ROUTES } from '../api';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Fab } from '@mui/material';
 import { Box } from '@mui/material';
-import { Send } from '@material-ui/icons';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import robot from '../assets/robot.png';
-import enviarIcon from '../assets/Enviar.png';
 import PromptQuestion from './PromptQuestion';
 import ResponseAi from './ResponseAi';
 import useScreenSize from '../hooks/resize';
 import Header from './header';
+import SendMessage from './SendMessge';
 
 const ChatSteren = () => {
   const [messages, setMessages] = useState([]);
@@ -27,12 +24,7 @@ const ChatSteren = () => {
   const [isTyping, setIsTyping] = useState(false);
   const templateProfesion = useSelector((store) => store.Chat.templateProfesion);
   const templateStyle = useSelector((store) => store.Chat.templateStyle);
-
-  useEffect(() => {
-    if (idTemplate !== undefined) {
-      const avatars = Array.from(Array(0).keys());
-    }
-  }, [idTemplate]);
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   useEffect(() => {
     setIsMobile(width < 1000);
@@ -40,10 +32,13 @@ const ChatSteren = () => {
 
   const handleMessageSubmit = async (event) => {
     try {
+
+     if(event) event.preventDefault(); // Prevent the default form submission behavior
       setSendingMessage(true);
-      event.preventDefault();
       const userInput = search;
+      if(search === '') return;
       setSearch('');
+
       const data = {
         input: userInput,
         style: templateStyle,
@@ -75,30 +70,7 @@ const ChatSteren = () => {
       );
 
       if (response?.data?.data) {
-        
-        const responseEleven = await axios.post('https://api.elevenlabs.io/v1/text-to-speech/6t6mDwPhuoeCdhY683Zp', {
-        text: response.data.data,
-        model_id: "eleven_multilingual_v1",
-        voice_settings: {
-          stability: 0.7,
-          similarity_boost: 0.62
-        }
-      }, {
-        headers: {
-          Accept: "audio/mpeg",
-          "Content-Type": "application/json",
-          "xi-api-key": "f2bdde34e653f534c5b3fc9c1b90ac2c"
-        },
-        responseType: "arraybuffer" // Especifica el tipo de respuesta como arraybuffer
-      });
-  
-      if (responseEleven.status === 200) {
-        const audioData = responseEleven.data;
-        const audioBlob = new Blob([audioData], { type: "audio/mpeg" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-  
-        const audio = new Audio(audioUrl);
-        audio.play();
+        if(isSpeaking) await synthesizeTextToSpeech(response.data.data);
         let newChatList = chatList;
         newChatList.pop();
         const aiMessage = {
@@ -110,23 +82,121 @@ const ChatSteren = () => {
           style: { color: 'blue' },
         };
         setMessages([...newChatList, aiMessage]);
-        //setAiResponse(response.data.data);
         setSendingMessage(false);
         scrollToBottom();   
       }
-      }
+
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    // scrollToBottom();
-  }, [messages]);
+  const handleVoiceSubmit = async (text) => {
+    try {
+       setSendingMessage(true);
+       const userInput = text;
+       setSearch('');
+       const data = {
+         input: userInput,
+         style: templateStyle,
+         profesion: templateProfesion,
+         idTemplate,
+       };
+       const userMessage = {
+         position: 'right',
+         type: 'text',
+         text: userInput,
+         date: new Date(),
+         isResponsed: false,
+         style: { color: 'blue' },
+       };
+       const aiMessage = {
+         position: 'left',
+         type: 'text',
+         text: '',
+         isResponsed: false,
+         date: new Date(),
+         style: { color: 'blue' },
+       };
+       const chatList = [...messages, userMessage, aiMessage];
+       setMessages(chatList);
+ 
+       const response = await (await API()).post(
+         ROUTES.GET_AI_RESPONS,
+         JSON.stringify(data)
+       );
+ 
+       if (response?.data?.data) {
+         if(isSpeaking) await synthesizeTextToSpeech(response.data.data);
+         let newChatList = chatList;
+         newChatList.pop();
+         const aiMessage = {
+           position: 'left',
+           type: 'text',
+           text: response.data.data,
+           isResponsed: true,
+           date: new Date(),
+           style: { color: 'blue' },
+         };
+         setMessages([...newChatList, aiMessage]);
+         setSendingMessage(false);
+         scrollToBottom();   
+       }
+ 
+     } catch (error) {
+       console.log(error);
+     }
+  }
 
+  const synthesizeTextToSpeech = (text) => {
+    return new Promise(async(resolve, reject) => {
+         try {
+          //  const responseEleven = await axios.get('https://api.elevenlabs.io/v1/voices', {
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //     "xi-api-key": "403248d65aefae80d73c342dfd9e33d3"
+          //   },
+          //   // responseType: "arraybuffer"
+          // });
+
+          // console.log(responseEleven);
+
+          const responseEleven = await axios.post('https://api.elevenlabs.io/v1/text-to-speech/ErXwobaYiN019PkySvjV', {
+            text:text,
+            model_id: "eleven_multilingual_v1",
+            voice_settings: {
+              stability: 0.7,
+              similarity_boost: 0.62
+            }
+          }, {
+            headers: {
+              Accept: "audio/mpeg",
+              "Content-Type": "application/json",
+              "xi-api-key": "403248d65aefae80d73c342dfd9e33d3"
+            },
+            responseType: "arraybuffer"
+          });
+          const audioData = responseEleven.data;
+          const audioBlob = new Blob([audioData], { type: "audio/mpeg" });
+          const audioUrl = URL.createObjectURL(audioBlob);
+    
+          const audio = new Audio(audioUrl);
+          audio.play();
+          resolve(true);
+         } catch (error) {
+          resolve(true)
+         }
+    })
+  }
   const scrollToBottom = () => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleMessageSubmit()
     }
   };
 
@@ -147,7 +217,7 @@ const ChatSteren = () => {
       }}
     >
       {/* <HeaderComponent indexAvatar={idx} /> */}
-      <Header />
+      <Header setSpeak={setIsSpeaking} />
       <div
         ref={lastMessageRef}
         style={{
@@ -177,9 +247,9 @@ const ChatSteren = () => {
         {isTyping && <div>El usuario está escribiendo...</div>}
       </div>
       <div style={{ flex: 1, flexDirection: 'row' }}>
-        <form
+        <div
           style={{ display: 'flex', justifyContent: 'center' }}
-          onSubmit={handleMessageSubmit}
+          // onSubmit={handleMessageSubmit}
           className="message-input"
         >
           <div
@@ -200,6 +270,7 @@ const ChatSteren = () => {
               type="text"
               name="message"
               value={search}
+              onKeyPress={handleKeyPress}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Escribe un mensaje"
               style={{
@@ -212,24 +283,13 @@ const ChatSteren = () => {
               }}
             />
             <Box sx={{ m: 1, position: 'relative' }}>
-              <Fab onClick={handleMessageSubmit}>
-                <img src={enviarIcon} alt="Enviar" style={{ width: '60px', height: '60px' }} />
-              </Fab>
-              {sendingMessage && (
-                <CircularProgress
-                  size={68}
-                  sx={{
-                    color: 'green',
-                    position: 'absolute',
-                    top: -6,
-                    left: -6,
-                    zIndex: 1,
-                  }}
-                />
-              )}
+              <SendMessage setSendMessage={() => handleMessageSubmit()} setText={(text) => {
+                handleVoiceSubmit(text)
+              }} 
+              />
             </Box>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
