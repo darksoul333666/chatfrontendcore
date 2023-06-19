@@ -11,6 +11,9 @@ import ResponseAi from './ResponseAi';
 import useScreenSize from '../hooks/resize';
 import Header from './header';
 import SendMessage from './SendMessge';
+import Tooltip from 'rc-tooltip';
+import 'rc-tooltip/assets/bootstrap.css';
+
 
 const ChatSteren = () => {
   const [messages, setMessages] = useState([]);
@@ -32,11 +35,10 @@ const ChatSteren = () => {
 
   const handleMessageSubmit = async (event) => {
     try {
-
-     if(event) event.preventDefault(); // Prevent the default form submission behavior
+      if (event) event.preventDefault(); // Prevent the default form submission behavior
       setSendingMessage(true);
       const userInput = search;
-      if(search === '') return;
+      if (search === '') return;
       setSearch('');
 
       const data = {
@@ -70,7 +72,7 @@ const ChatSteren = () => {
       );
 
       if (response?.data?.data) {
-        if(isSpeaking) await synthesizeTextToSpeech(response.data.data);
+        if (isSpeaking) await synthesizeTextToSpeech(response.data.data);
         let newChatList = chatList;
         newChatList.pop();
         const aiMessage = {
@@ -83,9 +85,8 @@ const ChatSteren = () => {
         };
         setMessages([...newChatList, aiMessage]);
         setSendingMessage(false);
-        scrollToBottom();   
+        scrollToBottom();
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -93,101 +94,92 @@ const ChatSteren = () => {
 
   const handleVoiceSubmit = async (text) => {
     try {
-       setSendingMessage(true);
-       const userInput = text;
-       setSearch('');
-       const data = {
-         input: userInput,
-         style: templateStyle,
-         profesion: templateProfesion,
-         idTemplate,
-       };
-       const userMessage = {
-         position: 'right',
-         type: 'text',
-         text: userInput,
-         date: new Date(),
-         isResponsed: false,
-         style: { color: 'blue' },
-       };
-       const aiMessage = {
-         position: 'left',
-         type: 'text',
-         text: '',
-         isResponsed: false,
-         date: new Date(),
-         style: { color: 'blue' },
-       };
-       const chatList = [...messages, userMessage, aiMessage];
-       setMessages(chatList);
- 
-       const response = await (await API()).post(
-         ROUTES.GET_AI_RESPONS,
-         JSON.stringify(data)
-       );
- 
-       if (response?.data?.data) {
-         if(isSpeaking) await synthesizeTextToSpeech(response.data.data);
-         let newChatList = chatList;
-         newChatList.pop();
-         const aiMessage = {
-           position: 'left',
-           type: 'text',
-           text: response.data.data,
-           isResponsed: true,
-           date: new Date(),
-           style: { color: 'blue' },
-         };
-         setMessages([...newChatList, aiMessage]);
-         setSendingMessage(false);
-         scrollToBottom();   
-       }
- 
-     } catch (error) {
-       console.log(error);
-     }
-  }
+      setSendingMessage(true);
+      const userInput = text;
+      setSearch('');
+      const data = {
+        input: userInput,
+        style: templateStyle,
+        profesion: templateProfesion,
+        idTemplate,
+      };
+      const userMessage = {
+        position: 'right',
+        type: 'text',
+        text: userInput,
+        date: new Date(),
+        isResponsed: false,
+        style: { color: 'blue' },
+      };
+      const aiMessage = {
+        position: 'left',
+        type: 'text',
+        text: '',
+        isResponsed: false,
+        date: new Date(),
+        style: { color: 'blue' },
+      };
+      const chatList = [...messages, userMessage, aiMessage];
+      setMessages(chatList);
 
-  const synthesizeTextToSpeech = (text) => {
-    return new Promise(async(resolve, reject) => {
-         try {
-          //  const responseEleven = await axios.get('https://api.elevenlabs.io/v1/voices', {
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //     "xi-api-key": "403248d65aefae80d73c342dfd9e33d3"
-          //   },
-          //   // responseType: "arraybuffer"
-          // });
+      const response = await (await API()).post(
+        ROUTES.GET_AI_RESPONS,
+        JSON.stringify(data)
+      );
 
-          // console.log(responseEleven);
+      if (response?.data?.data) {
+        if (isSpeaking) await synthesizeTextToSpeech(response.data.data);
+        let newChatList = chatList;
+        newChatList.pop();
+        const aiMessage = {
+          position: 'left',
+          type: 'text',
+          text: response.data.data,
+          isResponsed: true,
+          date: new Date(),
+          style: { color: 'blue' },
+        };
+        setMessages([...newChatList, aiMessage]);
+        setSendingMessage(false);
+        scrollToBottom();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-          const responseEleven = await axios.post('https://api.elevenlabs.io/v1/text-to-speech/ErXwobaYiN019PkySvjV', {
-            text:text,
-            model_id: "eleven_multilingual_v1",
-            voice_settings: {
-              stability: 0.7,
-              similarity_boost: 0.62
-            }
-          }, {
-            headers: {
-              Accept: "audio/mpeg",
-              "Content-Type": "application/json",
-              "xi-api-key": "403248d65aefae80d73c342dfd9e33d3"
-            },
-            responseType: "arraybuffer"
-          });
-          const audioData = responseEleven.data;
-          const audioBlob = new Blob([audioData], { type: "audio/mpeg" });
-          const audioUrl = URL.createObjectURL(audioBlob);
-    
-          const audio = new Audio(audioUrl);
-          audio.play();
-          resolve(true);
-         } catch (error) {
-          resolve(true)
-         }
-    })
-  }
+  const synthesizeTextToSpeech = async (text) => {
+    try {
+      const responseEleven = await axios.post(
+        'https://api.elevenlabs.io/v1/text-to-speech/ErXwobaYiN019PkySvjV',
+        {
+          text: text,
+          model_id: 'eleven_multilingual_v1',
+          voice_settings: {
+            stability: 0.7,
+            similarity_boost: 0.62,
+          },
+        },
+        {
+          headers: {
+            Accept: 'audio/mpeg',
+            'Content-Type': 'application/json',
+            'xi-api-key': '403248d65aefae80d73c342dfd9e33d3',
+          },
+          responseType: 'arraybuffer',
+        }
+      );
+      const audioData = responseEleven.data;
+      const audioBlob = new Blob([audioData], { type: 'audio/mpeg' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      const audio = new Audio(audioUrl);
+      audio.play();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const scrollToBottom = () => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -196,7 +188,7 @@ const ChatSteren = () => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleMessageSubmit()
+      handleMessageSubmit();
     }
   };
 
@@ -217,6 +209,7 @@ const ChatSteren = () => {
       }}
     >
       {/* <HeaderComponent indexAvatar={idx} /> */}
+   
       <Header setSpeak={setIsSpeaking} />
       <div
         ref={lastMessageRef}
@@ -266,28 +259,52 @@ const ChatSteren = () => {
               bottom: 0,
             }}
           >
-            <input
-              type="text"
-              name="message"
-              value={search}
-              onKeyPress={handleKeyPress}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Escribe un mensaje"
-              style={{
-                flex: '1',
-                border: 'none',
-                outline: 'none',
-                fontSize: '16px',
-                marginLeft: '10px',
-                justifySelf: 'center',
+            <Tooltip
+                overlay="Espacio para escribir consultas o mensajes, junto con un botón para enviar el mensaje."
+                placement="top"
+                overlayStyle={{
+                  background: '#9CF1EB',
+
+                color: '#fff',
+                borderRadius: '10px',
+                fontSize: '10px',
+                padding: '10px',
+                textAlign: 'center',
               }}
-            />
-            <Box sx={{ m: 1, position: 'relative' }}>
-              <SendMessage setSendMessage={() => handleMessageSubmit()} setText={(text) => {
-                handleVoiceSubmit(text)
-              }} 
+            >
+              <input
+                type="text"
+                name="message"
+                value={search}
+                onKeyPress={handleKeyPress}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Escribe un mensaje"
+                style={{
+                  flex: '1',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '16px',
+                  marginLeft: '10px',
+                  justifySelf: 'center',
+                }}
               />
+            </Tooltip>
+            <Tooltip
+  overlay="Permite grabar mensajes de voz y utilizar la interacción por voz en lugar de escribir un mensaje."
+  placement="rightTop"
+  overlayStyle={{
+    backgroundColor: '#9CF1EB',
+    borderRadius: '10px',
+    fontSize: '10px',
+    padding: '10px',
+    textAlign: 'center',
+  }}
+  >
+    
+            <Box sx={{ m: 1, position: 'relative' }}>
+              <SendMessage setSendMessage={handleMessageSubmit} setText={handleVoiceSubmit} />
             </Box>
+            </Tooltip>
           </div>
         </div>
       </div>
