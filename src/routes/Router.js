@@ -13,7 +13,7 @@ import  ChatSteren  from "../components/ChatSteren";
  export const router = createBrowserRouter([
     {
       path: "/",
-      element: <SideMenu/> ,
+      element: <ChatSteren/> ,
       children: [
         {
           path: "newTemplate",
@@ -33,7 +33,7 @@ import  ChatSteren  from "../components/ChatSteren";
         element: <ChatComponent/>,
       }
       ],
-      path: "STEREN",
-      element: <ChatSteren/> ,
+      // path: "STEREN",
+      // element: <ChatSteren/> ,
     }
   ]);
