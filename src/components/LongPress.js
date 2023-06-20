@@ -41,7 +41,7 @@ const LongPressButton = ({ onPress, onLongPress, onRelease, delay = 500, childre
       onMouseUp={handlePressEnd}
       onContextMenu={handleContextMenu} // Agrega el controlador de contextmenu
       style={{
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         border: 'none',
         WebkitUserSelect: 'none',
         MozUserSelect: 'none',

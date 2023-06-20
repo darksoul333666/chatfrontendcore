@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import HeaderComponent from '../components/HeaderTemplate';
 import { API, ROUTES } from '../api';
-import CircularProgress from '@mui/material/CircularProgress';
 import { Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -215,8 +213,8 @@ const ChatSteren = () => {
   return (
     <div
       style={{
-        backgroundImage: `url(${require('../assets/fondo.jpg')})`,
-        // backgroundColor:'gray',
+        // backgroundImage: `url(${require('../assets/fondo.jpg')})`,
+        backgroundColor:'#fafafa',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',

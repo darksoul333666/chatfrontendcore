@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core';
 import { Box, Container } from '@mui/material';
 import { BotIconNotSpeaking, BotIconSpeaking } from '../assets';
-import LongPress from 'react-longpressable';
+import LongPressButton from './LongPress';
 import Tooltip from 'rc-tooltip';
-import 'rc-tooltip/assets/bootstrap.css';
 
 
-const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
+const Header = ({isMobile, animationHeader, width, setSpeak= Function}) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [animation, setAnimation] = useState({
     talking:false, noTalking:false
@@ -15,6 +13,8 @@ const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
   const styles = {
     header: {
       height:!isMobile ? 100 : 40,
+      backgroundColor:'white',
+      width:width,
       borderBottomLeftRadius: '30%',
       borderBottomRightRadius: '20%',
       // overflow: 'hidden',
@@ -43,10 +43,11 @@ const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
     if(animation.noTalking){
       setTimeout(() =>{
         setIsSpeaking(true)
-        setAnimation({
-          talking:true, noTalking:false
-        })
-
+        setTimeout(() =>{
+          setAnimation({
+            talking:true, noTalking:false
+          })
+        }, 400)
       },3000)
     }
 
@@ -63,14 +64,10 @@ const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
 
 
   return (
-    <header className={styles.header}>
-      <Container>
+    <header style={styles.header} >
+      <Container  >
       <Tooltip
   visible={animation.talking | animation.noTalking}
-  // onVisibleChange={(visible) => {
-    
-    
-  // }}
   overlay={ !isSpeaking ? 'Activa la funcionalidad de Texto a Voz para escuchar la respuesta del chatbot' : 'Desactiva la funcionalidad de Texto a Voz para dejar de escuchar la respuesta del chatbot.'}
   placement={!isSpeaking? "bottom":"bottom"}
   overlayStyle={{
@@ -82,10 +79,9 @@ const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
     width:'40%'
   }}
 >
-
-<Box py={4}>
-          <LongPress
-          onShortPress={() =>setIsSpeaking(!isSpeaking)}
+<Box py={4} >
+          <LongPressButton
+          onPress={() =>setIsSpeaking(!isSpeaking)}
           onLongPress={()=>{}}
           >
           {isSpeaking ? 
@@ -93,7 +89,7 @@ const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
           :
         <BotIconNotSpeaking onClick={() =>setIsSpeaking(!isSpeaking)} />
           }
-          </LongPress>
+          </LongPressButton>
          
         </Box>
         </Tooltip>
