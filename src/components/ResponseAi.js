@@ -15,7 +15,7 @@ const ResponseAi = ({ message, isResponsed }) => {
           <img src={robotAvatar} alt="Robot Avatar" style={{ width: '30px', height: '30px', marginLeft:1, marginTop:2 }} />
           </div>
           {isResponsed ? (
-            <TypingEffect text={message} speed={40}/>
+            <TypingEffect text={message} speed={10}/>
           ) : (
             <MoreHorizIcon sx={{marginLeft:-1}} />
 )}

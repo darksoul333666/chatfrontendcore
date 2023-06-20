@@ -28,9 +28,17 @@ const ChatSteren = () => {
   const templateProfesion = useSelector((store) => store.Chat.templateProfesion);
   const templateStyle = useSelector((store) => store.Chat.templateStyle);
   const [isSpeaking, setIsSpeaking] = useState(false);
-
+  const [animation, setAnimation] = useState({
+    button:false, input:false, header:false
+  })
   useEffect(() => {
     setIsMobile(width < 1000);
+
+    setTimeout(() =>{
+      setAnimation({
+        button:false, input:true, header:false
+      })
+    }, 1500);
   }, [width]);
 
   const handleMessageSubmit = async (event) => {
@@ -196,10 +204,12 @@ const ChatSteren = () => {
     <div
       style={{
         backgroundImage: `url(${require('../assets/fondo.jpg')})`,
+        // backgroundColor:'gray',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        height: '100vh',
+        height: height,
+        width:width,
         textAlign: 'center',
         flex: 1,
         display: 'flex',
@@ -210,7 +220,7 @@ const ChatSteren = () => {
     >
       {/* <HeaderComponent indexAvatar={idx} /> */}
    
-      <Header setSpeak={setIsSpeaking} />
+      <Header animationHeader={animation} width={width} setSpeak={setIsSpeaking} />
       <div
         ref={lastMessageRef}
         style={{
@@ -260,16 +270,26 @@ const ChatSteren = () => {
             }}
           >
             <Tooltip
+                visible={animation.input}
                 overlay="Espacio para escribir consultas o mensajes, junto con un botón para enviar el mensaje."
                 placement="top"
+                afterVisibleChange={(visible) => {
+                  if(visible){
+                  setTimeout(() =>{
+                    setAnimation({
+                      button:true, input:false, header:false
+                    })
+                  }, 3000 )
+                  }
+                }}
                 overlayStyle={{
-                  background: '#9CF1EB',
-
+                background: '#9CF1EB',
                 color: '#fff',
                 borderRadius: '10px',
                 fontSize: '10px',
                 padding: '10px',
                 textAlign: 'center',
+                width:'70%'
               }}
             >
               <input
@@ -277,6 +297,7 @@ const ChatSteren = () => {
                 name="message"
                 value={search}
                 onKeyPress={handleKeyPress}
+                autoComplete='off'
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Escribe un mensaje"
                 style={{
@@ -290,16 +311,27 @@ const ChatSteren = () => {
               />
             </Tooltip>
             <Tooltip
-  overlay="Permite grabar mensajes de voz y utilizar la interacción por voz en lugar de escribir un mensaje."
-  placement="rightTop"
-  overlayStyle={{
-    backgroundColor: '#9CF1EB',
-    borderRadius: '10px',
-    fontSize: '10px',
-    padding: '10px',
-    textAlign: 'center',
-  }}
-  >
+              visible={animation.button}
+              overlay="Permite grabar mensajes de voz y utilizar la interacción por voz en lugar de escribir un mensaje."
+              placement="leftTop"
+              afterVisibleChange={(visible) => {
+                if(visible){
+                  setTimeout(() =>{
+                    setAnimation({
+                      button:false, input:false, header:true
+                    })
+                  } , 3000)
+                }
+              }}
+              overlayStyle={{
+                backgroundColor: '#9CF1EB',
+                borderRadius: '10px',
+                fontSize: '10px',
+                padding: '10px',
+                textAlign: 'center',
+                width:'50%'
+              }}
+              >
     
             <Box sx={{ m: 1, position: 'relative' }}>
               <SendMessage setSendMessage={handleMessageSubmit} setText={handleVoiceSubmit} />

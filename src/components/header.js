@@ -7,8 +7,11 @@ import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
 
 
-const Header = ({isMobile, setSpeak= Function}) => {
+const Header = ({isMobile, animationHeader, setSpeak= Function}) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [animation, setAnimation] = useState({
+    talking:false, noTalking:false
+  })
   const styles = {
     header: {
       height:!isMobile ? 100 : 40,
@@ -27,18 +30,56 @@ const Header = ({isMobile, setSpeak= Function}) => {
     setSpeak(isSpeaking);
   },[isSpeaking])
 
+  useEffect(() =>{
+   if( animationHeader.header){
+    setAnimation({
+      talking:false, noTalking:true
+    })
+   }
+  },[animationHeader])
+
+  useEffect(() => {
+   
+    if(animation.noTalking){
+      setTimeout(() =>{
+        setIsSpeaking(true)
+        setAnimation({
+          talking:true, noTalking:false
+        })
+
+      },3000)
+    }
+
+    if(animation.talking){
+      setTimeout(() =>{
+        setIsSpeaking(false)
+        setAnimation({
+          talking:false, noTalking:false
+        })
+
+      },3000)
+    }
+  }, [animation])
+
+
   return (
     <header className={styles.header}>
       <Container>
       <Tooltip
+  visible={animation.talking | animation.noTalking}
+  // onVisibleChange={(visible) => {
+    
+    
+  // }}
   overlay={ !isSpeaking ? 'Activa la funcionalidad de Texto a Voz para escuchar la respuesta del chatbot' : 'Desactiva la funcionalidad de Texto a Voz para dejar de escuchar la respuesta del chatbot.'}
-  placement={!isSpeaking? "leftTop":"rightTop"}
+  placement={!isSpeaking? "bottom":"bottom"}
   overlayStyle={{
     backgroundColor: '#9CF1EB',
     borderRadius: '10px',
     fontSize: '10px',
     padding: '8px',
     textAlign: 'center',
+    width:'40%'
   }}
 >
 
