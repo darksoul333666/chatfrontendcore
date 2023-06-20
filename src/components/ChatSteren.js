@@ -33,7 +33,6 @@ const ChatSteren = () => {
   })
   useEffect(() => {
     setIsMobile(width < 1000);
-
     setTimeout(() =>{
       setAnimation({
         button:false, input:true, header:false
@@ -172,11 +171,24 @@ const ChatSteren = () => {
           headers: {
             Accept: 'audio/mpeg',
             'Content-Type': 'application/json',
-            'xi-api-key': '403248d65aefae80d73c342dfd9e33d3',
+            'xi-api-key': '591efd21c7858c3dc9be2c39147ab437',
           },
           responseType: 'arraybuffer',
         }
       );
+
+      // const responseEleven = await axios.get(
+      //   'https://api.elevenlabs.io/v1/voices',
+        
+      //   {
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       'xi-api-key': '591efd21c7858c3dc9be2c39147ab437',
+      //     },
+      //   }
+      // );
+
+      console.log(responseEleven);
       const audioData = responseEleven.data;
       const audioBlob = new Blob([audioData], { type: 'audio/mpeg' });
       const audioUrl = URL.createObjectURL(audioBlob);
