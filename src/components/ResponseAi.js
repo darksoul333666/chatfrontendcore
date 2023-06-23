@@ -1,23 +1,19 @@
 import React from 'react';
 // import robotAvatar from '../assets/robot.png';
-import robotAvatar from '../assets/BotNotSpeaking.png'
+import robotAvatar from '../assets/botchat.jpeg'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TypingEffect from './TypiygText';
-
 const ResponseAi = ({ message, isResponsed }) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
       <div style={{ backgroundColor: '#fff', color: 'black', padding: '10px', borderRadius: '10px',marginLeft: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{backgroundColor:'#9CF1EB', display:'flex', flexDirection:'column',
-          alignItems:'center', justifyContent:'center', marginRight: '10px',
-          borderRadius:50, width:45, height:45}} >
-          <img src={robotAvatar} alt="Robot Avatar" style={{ width: '30px', height: '30px', marginLeft:1, marginTop:2 }} />
-          </div>
+        <img src={robotAvatar} alt="Robot Avatar" style={{ width: '30px', height: '30px', marginLeft:10, marginRight:10, marginTop:2 }} />
+
           {isResponsed ? (
-            <TypingEffect text={message} speed={10}/>
+            <TypingEffect text={message} style={{marginLeft:10}} speed={10}/>
           ) : (
-            <MoreHorizIcon sx={{marginLeft:-1}} />
+            <MoreHorizIcon  />
 )}
         </div>
       </div>

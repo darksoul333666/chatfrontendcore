@@ -31,11 +31,11 @@ const ChatSteren = () => {
   })
   useEffect(() => {
     setIsMobile(width < 1000);
-    setTimeout(() =>{
-      setAnimation({
-        button:false, input:true, header:false
-      })
-    }, 1500);
+    // setTimeout(() =>{
+    //   setAnimation({
+    //     button:false, input:true, header:false
+    //   })
+    // }, 1500);
   }, [width]);
 
   const handleMessageSubmit = async (event) => {
