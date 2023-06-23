@@ -239,7 +239,7 @@ const ChatSteren = () => {
           overflow: 'scroll',
           textAlign: 'justify',
           marginBottom: 80,
-          marginTop: !isMobile ? 80 : 10,
+          marginTop: !isMobile ? 80 : 20,
         }}
       >
         {messages.map((message, index) => {

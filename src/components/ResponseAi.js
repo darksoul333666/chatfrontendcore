@@ -1,6 +1,6 @@
 import React from 'react';
 // import robotAvatar from '../assets/robot.png';
-import robotAvatar from '../assets/botchat.jpeg'
+import robotAvatar from '../assets/botchat.png'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TypingEffect from './TypiygText';
 const ResponseAi = ({ message, isResponsed }) => {
