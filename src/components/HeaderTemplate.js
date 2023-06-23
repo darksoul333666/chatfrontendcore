@@ -66,7 +66,7 @@ const HeaderComponent = ({indexAvatar, isMobile}) => {
     <AppBar position="fixed" >
       {/* <Toolbar   sx={{ justifyContent: 'center',backgroundColor:'white' }}> */}
         <Box sx={{ display: 'flex',  width:"100%", position:'absolute',justifyContent: 'center' }}>
-          <Avatar src={Robot} sx={{ width: 65, height: 90, marginTop: isMobile ? 0 : 6}} />
+          <Avatar src={Robot} sx={{ width: isMobile ? 50 : 65,  height: isMobile ? 70 : 90, marginTop: isMobile ? 0 : 6}} />
         </Box>
       {/* </Toolbar> */}
     </AppBar>
