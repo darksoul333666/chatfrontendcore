@@ -11,7 +11,7 @@ import Header from './header';
 import SendMessage from './SendMessge';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
-
+import convertirTextoAPalabras from '../utils/numberToWords';
 
 const ChatSteren = () => {
   const [messages, setMessages] = useState([]);
@@ -77,7 +77,7 @@ const ChatSteren = () => {
       );
 
       if (response?.data?.data) {
-        if (isSpeaking) await synthesizeTextToSpeech(response.data.data);
+        if (isSpeaking) await synthesizeTextToSpeech(convertirTextoAPalabras(response.data.data));
         let newChatList = chatList;
         newChatList.pop();
         const aiMessage = {
@@ -133,7 +133,7 @@ const ChatSteren = () => {
       );
 
       if (response?.data?.data) {
-        if (isSpeaking) await synthesizeTextToSpeech(response.data.data);
+        if (isSpeaking) await synthesizeTextToSpeech(convertirTextoAPalabras(response.data.data));
         let newChatList = chatList;
         newChatList.pop();
         const aiMessage = {
@@ -308,6 +308,7 @@ const ChatSteren = () => {
                 value={search}
                 onKeyPress={handleKeyPress}
                 autoComplete='off'
+                autoFocus="true"
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Escribe un mensaje"
                 style={{
