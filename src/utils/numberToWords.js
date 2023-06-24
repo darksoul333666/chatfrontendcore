@@ -88,7 +88,7 @@ function convertirNumeroAPalabras(numero) {
   
       // Agregar "pesos" al final del número si está precedido por el símbolo "$"
       if (match.startsWith('$')) {
-        return `${numeroEnPalabras} ${unidadesMonetarias}`;
+        return `${numeroEnPalabras}`;
       } else {
         return numeroEnPalabras;
       }
@@ -101,8 +101,6 @@ function convertirNumeroAPalabras(numero) {
     return quantity.replace(/\$|,/g, '');
   }
   
-  // Ejemplo de uso
-  const texto = '$1,520';
-  
-  console.log(convertirTextoAPalabras(texto));
+
+  export default convertirTextoAPalabras;
   
