@@ -1,3 +1,5 @@
+const unidadesMonetarias = 'pesos';
+
 function convertirNumeroAPalabras(numero) {
     const unidades = ['', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
     const especiales = {
@@ -24,6 +26,8 @@ function convertirNumeroAPalabras(numero) {
       return especiales[numero];
     } else if (numero < 20) {
       return 'dieci' + unidades[numero - 10];
+    } else if (numero === 20) {
+      return 'veinte';
     } else if (numero < 30) {
       return 'veinti' + unidades[numero - 20];
     } else if (numero < 100) {
@@ -42,6 +46,8 @@ function convertirNumeroAPalabras(numero) {
           return 'cien';
         } else if (centenas === 7) {
           return 'setecientos';
+        } else if (centenas === 5) {
+          return 'quinientos';
         } else if (centenas === 9) {
           return 'novecientos';
         } else {
@@ -82,7 +88,7 @@ function convertirNumeroAPalabras(numero) {
   
       // Agregar "pesos" al final del número si está precedido por el símbolo "$"
       if (match.startsWith('$')) {
-        return `${numeroEnPalabras} pesos`;
+        return `${numeroEnPalabras} ${unidadesMonetarias}`;
       } else {
         return numeroEnPalabras;
       }
@@ -90,8 +96,13 @@ function convertirNumeroAPalabras(numero) {
   
     return textoConvertido;
   }
+  
   function removeDelimitersFromQuantity(quantity) {
     return quantity.replace(/\$|,/g, '');
   }
   
-export default convertirTextoAPalabras;
+  // Ejemplo de uso
+  const texto = '$1,520';
+  
+  console.log(convertirTextoAPalabras(texto));
+  
